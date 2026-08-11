@@ -1,47 +1,103 @@
 import fs from 'node:fs';
 
-const firstName = 'Patrick';
-const lastName = 'Marleau';
-
-// const firstName = 'Sidney';
-// const lastName = 'Crosby';
-
-const reqString = `https://api.nhle.com/stats/rest/en/players?cayenneExp=firstName%20likeIgnoreCase%20'%${firstName}%'%20and%20lastName%20likeIgnoreCase%20'%${lastName}%'`;
-
-// TODO: DRY AND GOALIE
-
-async function fetchData() {
+async function fetchData(url: string) {
     try {
-        const basicResponse = await fetch(reqString);
-
-        if(!basicResponse.ok) {
-            console.log(`Error: ${basicResponse.status}`);
-            return;
+        const response = await fetch(url);
+        if(!response.ok) {
+            console.log(`Error: ${response.status}`);     
+            return;       
         }
-
-        const basicData = await basicResponse.json();
-        console.log(basicData);
-        
-        const playerId = basicData.data[0].id;
-        const playerUrl = `https://api-web.nhle.com/v1/player/${playerId}/landing`;
-                            
-        const playerResponse = await fetch (playerUrl);
-
-        if(!playerResponse.ok) {
-            console.log(`Error: ${playerResponse.status}`);
-            return;
-        }
-
-        const playerData = await playerResponse.json();
-        console.log(playerData.featuredStats);
-
-        fs.writeFileSync('player-output.json', JSON.stringify(playerData, null, 2));
-
-
+        const data = await response.json();                                
+        return data;
     }
     catch (error) {
         console.log(error);        
     }
 }
 
-fetchData();
+async function fetchPlayer(firstName: string, lastName: string) {
+    const reqString = `https://api.nhle.com/stats/rest/en/players?cayenneExp=firstName%20likeIgnoreCase%20'%${firstName}%'%20and%20lastName%20likeIgnoreCase%20'%${lastName}%'`;
+    const playerData = await fetchData(reqString);        
+    
+    if (!playerData || playerData.total !== 1) {
+        console.log(`Expected exactly one match, got ${playerData.total}`);
+        return;
+    }
+    
+    const playerId = playerData.data[0].id;
+    const playerUrl = `https://api-web.nhle.com/v1/player/${playerId}/landing`;
+    const playerStats = await fetchData(playerUrl);
+
+    const player = {
+        firstName: playerStats.firstName.default,
+        lastName: playerStats.lastName.default,
+        position: playerStats.position,        
+        birthCountry: playerStats.birthCountry,
+        currentTeam: playerStats.fullTeamName.default,        
+        // CAREER TOTALS
+        regularSeason: {
+            // SKATER
+            gamesPlayed: playerStats.careerTotals.regularSeason.gamesPlayed,
+            goals: playerStats.careerTotals.regularSeason.goals,
+            assists: playerStats.careerTotals.regularSeason.assists,
+            points: playerStats.careerTotals.regularSeason.points,
+            gameWinningGoals: playerStats.careerTotals.regularSeason.gameWinningGoals,
+            otGoals: playerStats.careerTotals.regularSeason.otGoals,
+            shootingPctg: playerStats.careerTotals.regularSeason.shootingPctg,
+            plusMinus: playerStats.careerTotals.regularSeason.plusMinus,   
+            // GOALIE  
+            savePctg: playerStats.careerTotals.regularSeason.savePctg,
+            shutouts: playerStats.careerTotals.regularSeason.shutouts,
+            goalsAgainst: playerStats.careerTotals.regularSeason.goalsAgainst,
+            goalsAgainstAvg: playerStats.careerTotals.regularSeason.goalsAgainstAvg,
+            shotsAgainst: playerStats.careerTotals.regularSeason.shotsAgainst,            
+        },
+        playoffs: {
+            // SKATER
+            gamesPlayed: playerStats.careerTotals.playoffs.gamesPlayed,
+            goals: playerStats.careerTotals.playoffs.goals,
+            assists: playerStats.careerTotals.playoffs.assists,
+            points: playerStats.careerTotals.playoffs.points,
+            gameWinningGoals: playerStats.careerTotals.playoffs.gameWinningGoals,
+            otGoals: playerStats.careerTotals.playoffs.otGoals,
+            shootingPctg: playerStats.careerTotals.playoffs.shootingPctg,
+            plusMinus: playerStats.careerTotals.playoffs.plusMinus,    
+            // GOALIE  
+            savePctg: playerStats.careerTotals.playoffs.savePctg,
+            shutouts: playerStats.careerTotals.playoffs.shutouts,
+            goalsAgainst: playerStats.careerTotals.playoffs.goalsAgainst,
+            goalsAgainstAvg: playerStats.careerTotals.playoffs.goalsAgainstAvg,
+            shotsAgainst: playerStats.careerTotals.playoffs.shotsAgainst,          
+        }
+    };
+
+    console.log(player);
+    
+    fs.writeFileSync('player-output.json', JSON.stringify(player, null, 2));
+    
+    // fs.writeFileSync('player-output.json', JSON.stringify(playerStats, null, 2));
+}
+
+fetchPlayer('Connor', 'McDavid');
+// fetchPlayer('Jake', 'Oettinger');
+
+
+// SKATER STATS
+// careerTotals -> regularSeason/playoffs
+// gamesPlayed
+// goals
+// assists
+// points
+// gameWinningGoals
+// otGoals
+// shootingPctg
+// plusMinus
+
+// GOALIE STATS
+// careerTotals -> regularSeason/playoffs
+// gamesPlayed
+// savePctg
+// shutouts
+// goalsAgainst
+// goalsAgainstAvg
+// shotsAgainst

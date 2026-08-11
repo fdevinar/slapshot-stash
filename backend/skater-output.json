@@ -1,0 +1,45 @@
+{
+  "firstName": "Connor",
+  "lastName": "McDavid",
+  "position": "C",
+  "birthCountry": "CAN",
+  "currentTeam": "Edmonton Oilers",
+  "careerTotals": {
+    "regularSeason": {
+      "assists": 811,
+      "avgToi": "21:52",
+      "faceoffWinningPctg": 0.4792,
+      "gameWinningGoals": 76,
+      "gamesPlayed": 794,
+      "goals": 409,
+      "otGoals": 17,
+      "pim": 330,
+      "plusMinus": 186,
+      "points": 1220,
+      "powerPlayGoals": 100,
+      "powerPlayPoints": 418,
+      "shootingPctg": 0.1507,
+      "shorthandedGoals": 9,
+      "shorthandedPoints": 19,
+      "shots": 2713
+    },
+    "playoffs": {
+      "assists": 111,
+      "avgToi": "23:38",
+      "faceoffWinningPctg": 0.461,
+      "gameWinningGoals": 5,
+      "gamesPlayed": 102,
+      "goals": 45,
+      "otGoals": 2,
+      "pim": 30,
+      "plusMinus": 23,
+      "points": 156,
+      "powerPlayGoals": 14,
+      "powerPlayPoints": 58,
+      "shootingPctg": 0.1285,
+      "shorthandedGoals": 2,
+      "shorthandedPoints": 3,
+      "shots": 350
+    }
+  }
+}
