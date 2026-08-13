@@ -6,7 +6,11 @@ const playerArray = [
     'Connor McDavid',
     'Jake Oettinger',
     'Jacob Trouba',
-    'Martin Brodeur',    
+    'Martin Brodeur',   
+    'Bobby Orr', 
+    'Robert Orr', 
+    'Guy Charron', 
+    'Macklin Celebrini',
 ]
 
 // CYCLE PLAYER LIST
@@ -45,58 +49,67 @@ async function fetchPlayer(firstName: string, lastName: string) {
     const playerData = await fetchData(reqString);        
     
     if (!playerData || playerData.total !== 1) {
-        console.log(`Expected exactly one match, got ${playerData.total}`);
+        console.log(`Expected exactly one match, got ${playerData?.total ?? 0}`);
         return;
     }
+    console.log(playerData.data[0].lastName);
+    console.log(playerData.data[0].id);
     
     const playerId = playerData.data[0].id;
     const playerUrl = `https://api-web.nhle.com/v1/player/${playerId}/landing`;
     const playerStats = await fetchData(playerUrl);
 
-    const player = {
+    const basicStats = {
         firstName: playerStats.firstName.default,
         lastName: playerStats.lastName.default,
         position: playerStats.position,        
         birthCountry: playerStats.birthCountry,
         isActive: playerStats.isActive,
         currentTeam: playerStats.fullTeamName?.default,
-        // CAREER TOTALS
-        regularSeason: {
+    }
+    
+    const regularSeasonStats = playerStats.careerTotals?.regularSeason;
+    const playoffsStats = playerStats.careerTotals?.playoffs;
+    
+    const player = {
+        basicStats,
+        // CAREER TOTALS        
+        regularSeason: regularSeasonStats ? {
             // SKATER
-            gamesPlayed: playerStats.careerTotals.regularSeason.gamesPlayed,
-            goals: playerStats.careerTotals.regularSeason.goals,
-            assists: playerStats.careerTotals.regularSeason.assists,
-            points: playerStats.careerTotals.regularSeason.points,
-            gameWinningGoals: playerStats.careerTotals.regularSeason.gameWinningGoals,
-            otGoals: playerStats.careerTotals.regularSeason.otGoals,
-            shootingPctg: playerStats.careerTotals.regularSeason.shootingPctg,
-            plusMinus: playerStats.careerTotals.regularSeason.plusMinus,
-            timeOnIce: playerStats.careerTotals.regularSeason.avgToi,               
+            gamesPlayed: regularSeasonStats.gamesPlayed,
+            goals: regularSeasonStats.goals,
+            assists: regularSeasonStats.assists,
+            points: regularSeasonStats.points,
+            gameWinningGoals: regularSeasonStats.gameWinningGoals,
+            otGoals: regularSeasonStats.otGoals,
+            shootingPctg: regularSeasonStats.shootingPctg,
+            plusMinus: regularSeasonStats.plusMinus,
+            timeOnIce: regularSeasonStats.avgToi,               
             // GOALIE  
-            savePctg: playerStats.careerTotals.regularSeason.savePctg,
-            shutouts: playerStats.careerTotals.regularSeason.shutouts,
-            goalsAgainst: playerStats.careerTotals.regularSeason.goalsAgainst,
-            goalsAgainstAvg: playerStats.careerTotals.regularSeason.goalsAgainstAvg,
-            shotsAgainst: playerStats.careerTotals.regularSeason.shotsAgainst,            
-        },
-        playoffs: {
+            savePctg: regularSeasonStats.savePctg,
+            shutouts: regularSeasonStats.shutouts,
+            goalsAgainst: regularSeasonStats.goalsAgainst,
+            goalsAgainstAvg: regularSeasonStats.goalsAgainstAvg,
+            shotsAgainst: regularSeasonStats.shotsAgainst,            
+        } : null,
+        playoffs: playoffsStats ? {
             // SKATER
-            gamesPlayed: playerStats.careerTotals.playoffs.gamesPlayed,
-            goals: playerStats.careerTotals.playoffs.goals,
-            assists: playerStats.careerTotals.playoffs.assists,
-            points: playerStats.careerTotals.playoffs.points,
-            gameWinningGoals: playerStats.careerTotals.playoffs.gameWinningGoals,
-            otGoals: playerStats.careerTotals.playoffs.otGoals,
-            shootingPctg: playerStats.careerTotals.playoffs.shootingPctg,
-            plusMinus: playerStats.careerTotals.playoffs.plusMinus,    
-            timeOnIce: playerStats.careerTotals.playoffs.avgToi,               
+            gamesPlayed: playoffsStats.gamesPlayed,
+            goals: playoffsStats.goals,
+            assists: playoffsStats.assists,
+            points: playoffsStats.points,
+            gameWinningGoals: playoffsStats.gameWinningGoals,
+            otGoals: playoffsStats.otGoals,
+            shootingPctg: playoffsStats.shootingPctg,
+            plusMinus: playoffsStats.plusMinus,    
+            timeOnIce: playoffsStats.avgToi,               
             // GOALIE  
-            savePctg: playerStats.careerTotals.playoffs.savePctg,
-            shutouts: playerStats.careerTotals.playoffs.shutouts,
-            goalsAgainst: playerStats.careerTotals.playoffs.goalsAgainst,
-            goalsAgainstAvg: playerStats.careerTotals.playoffs.goalsAgainstAvg,
-            shotsAgainst: playerStats.careerTotals.playoffs.shotsAgainst,          
-        }
+            savePctg: playoffsStats.savePctg,
+            shutouts: playoffsStats.shutouts,
+            goalsAgainst: playoffsStats.goalsAgainst,
+            goalsAgainstAvg: playoffsStats.goalsAgainstAvg,
+            shotsAgainst: playoffsStats.shotsAgainst,          
+        } : null,
     };
     
     printArray.push(player);            

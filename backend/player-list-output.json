@@ -1,11 +1,13 @@
 [
   {
-    "firstName": "Connor",
-    "lastName": "McDavid",
-    "position": "C",
-    "birthCountry": "CAN",
-    "isActive": true,
-    "currentTeam": "Edmonton Oilers",
+    "basicStats": {
+      "firstName": "Connor",
+      "lastName": "McDavid",
+      "position": "C",
+      "birthCountry": "CAN",
+      "isActive": true,
+      "currentTeam": "Edmonton Oilers"
+    },
     "regularSeason": {
       "gamesPlayed": 794,
       "goals": 409,
@@ -30,12 +32,14 @@
     }
   },
   {
-    "firstName": "Jake",
-    "lastName": "Oettinger",
-    "position": "G",
-    "birthCountry": "USA",
-    "isActive": true,
-    "currentTeam": "Dallas Stars",
+    "basicStats": {
+      "firstName": "Jake",
+      "lastName": "Oettinger",
+      "position": "G",
+      "birthCountry": "USA",
+      "isActive": true,
+      "currentTeam": "Dallas Stars"
+    },
     "regularSeason": {
       "gamesPlayed": 305,
       "goals": 0,
@@ -58,12 +62,14 @@
     }
   },
   {
-    "firstName": "Jacob",
-    "lastName": "Trouba",
-    "position": "D",
-    "birthCountry": "USA",
-    "isActive": true,
-    "currentTeam": "San Jose Sharks",
+    "basicStats": {
+      "firstName": "Jacob",
+      "lastName": "Trouba",
+      "position": "D",
+      "birthCountry": "USA",
+      "isActive": true,
+      "currentTeam": "San Jose Sharks"
+    },
     "regularSeason": {
       "gamesPlayed": 906,
       "goals": 84,
@@ -88,11 +94,13 @@
     }
   },
   {
-    "firstName": "Martin",
-    "lastName": "Brodeur",
-    "position": "G",
-    "birthCountry": "CAN",
-    "isActive": false,
+    "basicStats": {
+      "firstName": "Martin",
+      "lastName": "Brodeur",
+      "position": "G",
+      "birthCountry": "CAN",
+      "isActive": false
+    },
     "regularSeason": {
       "gamesPlayed": 1266,
       "goals": 2,
@@ -113,5 +121,65 @@
       "goalsAgainstAvg": 2.019341,
       "shotsAgainst": 5258
     }
+  },
+  {
+    "basicStats": {
+      "firstName": "Bobby",
+      "lastName": "Orr",
+      "position": "D",
+      "birthCountry": "CAN",
+      "isActive": false
+    },
+    "regularSeason": {
+      "gamesPlayed": 657,
+      "goals": 270,
+      "assists": 645,
+      "points": 915,
+      "gameWinningGoals": 26,
+      "otGoals": 0,
+      "shootingPctg": 0.0882,
+      "plusMinus": 582
+    },
+    "playoffs": {
+      "gamesPlayed": 74,
+      "goals": 26,
+      "assists": 66,
+      "points": 92,
+      "gameWinningGoals": 7,
+      "otGoals": 1,
+      "shootingPctg": 0.0726,
+      "plusMinus": 60
+    }
+  },
+  {
+    "basicStats": {
+      "firstName": "Robert",
+      "lastName": "Orr",
+      "position": "R",
+      "birthCountry": "CAN",
+      "isActive": false
+    },
+    "regularSeason": null,
+    "playoffs": null
+  },
+  {
+    "basicStats": {
+      "firstName": "Guy",
+      "lastName": "Charron",
+      "position": "C",
+      "birthCountry": "CAN",
+      "isActive": false
+    },
+    "regularSeason": {
+      "gamesPlayed": 734,
+      "goals": 221,
+      "assists": 309,
+      "points": 530,
+      "gameWinningGoals": 23,
+      "otGoals": 0,
+      "shootingPctg": 0.12210000000000001,
+      "plusMinus": -210
+    },
+    "playoffs": null
   }
 ]
