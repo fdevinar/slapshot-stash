@@ -1,4 +1,5 @@
 const rawPort = process.env.PORT;
+const databaseUrl = process.env.DATABASE_URL;
 
 const DEFAULT_PORT = 3000;
 
@@ -19,6 +20,14 @@ function resolvePort(value: string | undefined): number {
   return parsed;
 }
 
+function resolveDatabaseUrl(value: string | undefined): string {
+  if (value === undefined) {
+    throw new Error('DATABASE_URL value is undefined');
+  }
+  return value;
+}
+
 export const config = {
   port: resolvePort(rawPort),
+  databaseUrl: resolveDatabaseUrl(databaseUrl),
 };

@@ -1,0 +1,12 @@
+# Ignore a specific folder (like Node dependencies)
+node_modules/
+
+# Ignore local environment variables containing sensitive keys
+.env
+
+# Ignore all files ending with a specific extension (e.g., log files)
+# *.log
+
+# Ignore operating system system files
+# .DS_Store
+# Thumbs.db
