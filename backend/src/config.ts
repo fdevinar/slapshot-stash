@@ -1,3 +1,5 @@
+import 'dotenv/config'
+
 const rawPort = process.env.PORT;
 const databaseUrl = process.env.DATABASE_URL;
 
