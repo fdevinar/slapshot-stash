@@ -1,3 +1,4 @@
+drop table "player_cache";
 create table "player_cache" (
 --   BASIC
   "player_id" INT not null,

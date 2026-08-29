@@ -6,9 +6,7 @@ const pool = new Pool( {connectionString: config.databaseUrl} );
 
 // TESTING POOL
 // const result = await pool.query('SELECT 1');
-// if (result.rowCount) {
-//   console.log("Pool Query OK");
-// }
+// if (result.rowCount) { console.log("Pool Query OK"); }
 
 const sqlUrl = new URL('./schema.sql', import.meta.url);
 const sqlQuery = await readFile(sqlUrl, 'utf8');
