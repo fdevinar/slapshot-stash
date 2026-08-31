@@ -13,10 +13,10 @@ const sqlQuery = await readFile(sqlUrl, 'utf8');
 
 try {
     const res = await pool.query(sqlQuery);
-    console.log("✅ Table created successfully!");
+    console.log("✅ Schema created/updated successfully!");
 } catch(err) {
     if (err instanceof Error) {
-        console.error("❌ Error creating table:", err.stack);
+        console.error("❌ Error creating/updating schema:", err.stack);
     } else {
         console.error("❌ Unknown error", err);    
     }

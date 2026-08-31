@@ -1,4 +1,7 @@
-drop table "player_cache";
+drop table if exists "cards";
+drop table if exists "sets";
+drop table if exists "player_cache";
+
 create table "player_cache" (
 --   BASIC
   "player_id" INT not null,
@@ -44,4 +47,18 @@ create table "player_cache" (
   "play_goals_against_avg" NUMERIC(4,3) null,
   "play_shots_against" INT null,
   constraint "player_cache_pkey" primary key ("player_id")
-)
+);
+
+create table "sets" (
+  "id" SERIAL not null,
+  "name" varchar(255) not null,
+  constraint "sets_pkey" primary key ("id")
+);
+
+create table "cards" (
+  "id" SERIAL not null,
+  "player_id" INT not null references "player_cache" ("player_id"),
+  "set_id" INT not null references "sets" ("id"),
+  constraint "cards_pkey" primary key ("id"),
+  constraint "cards_player_set_unique" unique ("player_id", "set_id")
+);
