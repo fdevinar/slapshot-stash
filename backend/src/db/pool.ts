@@ -8,20 +8,20 @@ const pool = new Pool( {connectionString: config.databaseUrl} );
 // const result = await pool.query('SELECT 1');
 // if (result.rowCount) { console.log("Pool Query OK"); }
 
-const sqlUrl = new URL('./schema.sql', import.meta.url);
-const sqlQuery = await readFile(sqlUrl, 'utf8');
-
-try {
-    const res = await pool.query(sqlQuery);
-    console.log("✅ Schema created/updated successfully!");
-} catch(err) {
-    if (err instanceof Error) {
-        console.error("❌ Error creating/updating schema:", err.stack);
-    } else {
-        console.error("❌ Unknown error", err);    
-    }
-} finally {
-    pool.end();
-}
+// CREATE SCHEMA
+// const sqlUrl = new URL('./schema.sql', import.meta.url);
+// const sqlQuery = await readFile(sqlUrl, 'utf8');
+// try {
+//     const res = await pool.query(sqlQuery);
+//     console.log("✅ Schema created/updated successfully!");
+// } catch(err) {
+//     if (err instanceof Error) {
+//         console.error("❌ Error creating/updating schema:", err.stack);
+//     } else {
+//         console.error("❌ Unknown error", err);    
+//     }
+// } finally {
+//     pool.end();
+// }
 
 export default pool;
