@@ -4,12 +4,15 @@ import createSet from "../services/sets.js";
 
 const router = Router();
 
-router.post('/',(req: Request, res: Response) => {
+router.post('/', async (req: Request, res: Response) => {
     const name = req.body.name;
-    console.log(name);
-
-    res.json({ message: name });
-
+    if (typeof name !== 'string' || name.trim() === '') {
+        res.status(400).json({error: 'Name is required'});
+        return;
+    }
+    const newSet = await createSet(name);
+    console.log(newSet);
+    res.status(201).json(newSet);    
 });
 
 export default router;
