@@ -17,4 +17,10 @@ export async function getSets(): Promise<Array<Set>> {
     return result.rows;
 }
 
+export async function getSetbyId(id: number): Promise<Set | undefined> {
+    const sqlQuery = 'SELECT * FROM sets WHERE id = $1;';
+    const result = await pool.query(sqlQuery, [id]);
+    return result.rows[0];
+}
+
 // export default createSet;

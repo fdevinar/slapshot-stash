@@ -1,8 +1,12 @@
 import { Router } from "express";
 import type { Request,Response } from "express";
-import {createSet, getSets} from "../services/sets.js";
+import {createSet, getSets, getSetbyId} from "../services/sets.js";
 
 const router = Router();
+
+interface UserRouteParams {
+    id: string;
+}
 
 router.post('/', async (req: Request, res: Response) => {
     const name = req.body.name;
@@ -19,6 +23,20 @@ router.get('/', async (req: Request, res: Response) => {
     const allSets = await getSets();
     console.log(allSets);
     res.status(200).json(allSets);
+});
+
+router.get('/:id', async (req: Request<UserRouteParams>, res: Response) => {    
+    const setId = parseInt(req.params.id, 10);
+    if (isNaN(setId)) {
+        res.status(400).json({error: 'ID must be a valid number'});
+        return;
+    }
+    const set = await getSetbyId(setId);
+    if (!set) {
+        res.status(404).json({error: 'Set not found'});
+    }
+    console.log(set);
+    res.status(200).json(set);
 });
 
 export default router;
