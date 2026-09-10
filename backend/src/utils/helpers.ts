@@ -8,7 +8,7 @@
 // console.log(convertTimeOnIce(t3));
 // console.log(convertTimeOnIce(t4));
 
-function convertTimeOnIce(value: string | null = null): number | null {
+export function convertTimeOnIce(value: string | null = null): number | null {
     
     if (value !== null) {
         const splitValue = value.split(":");

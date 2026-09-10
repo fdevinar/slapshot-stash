@@ -4,12 +4,12 @@ interface PlayerData {
     id: number;
     currentTeamId: number | null;
     fullName: string;
-    positionCode: string;
+    position: string;
     sweaterNumber: number;
 }
 
 // FETCH PLAYER ID FROM NHL API
-async function fetchPlayer(firstName: string, lastName: string): Promise<Array<PlayerData>> {
+async function fetchPlayerId(firstName: string, lastName: string): Promise<Array<PlayerData>> {
     
     const reqString = buildPlayerSearchUrl(firstName, lastName);
     const playerData = await fetchData(reqString);
@@ -18,7 +18,7 @@ async function fetchPlayer(firstName: string, lastName: string): Promise<Array<P
     return playerData.data as PlayerData[];    
 }
 
-// const logThis = await fetchPlayer('Sebastian', 'Aho');
+// const logThis = await fetchPlayerId('Sebastian', 'Aho');
 // console.log(logThis);
 
 // BUILD SEARCH URL
