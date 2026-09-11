@@ -1,4 +1,4 @@
-import { fetchData } from "../utils/helpers.js";
+import { fetchData, convertTimeOnIce } from "../utils/helpers.js";
 
 interface LandingData {        
     // ** BASIC STATS **
@@ -61,43 +61,43 @@ async function fetchPlayerData(id: number): Promise<LandingData> {
         sweaterNumber: playerStats.sweaterNumber,
         birthCountry: playerStats.birthCountry,
         isActive: playerStats.isActive,
-        currentTeam: playerStats.fullTeamName?.default,
+        currentTeam: playerStats.fullTeamName?.default ?? null,
         
         // ** REGULAR SEASON **
         // SKATER
-        regGamesPlayed: playerStats.careerTotals.regularSeason?.gamesPlayed,
-        regGoals: playerStats.careerTotals.regularSeason?.goals,
-        regAssists: playerStats.careerTotals.regularSeason?.assists,
-        regPoints: playerStats.careerTotals.regularSeason?.points,
-        regGameWinningGoals: playerStats.careerTotals.regularSeason?.gameWinningGoals,
-        regOtGoals: playerStats.careerTotals.regularSeason?.otGoals,
-        regShootingPctg: playerStats.careerTotals.regularSeason?.shootingPctg,
-        regPlusMinus: playerStats.careerTotals.regularSeason?.plusMinus,
-        regTimeOnIce: playerStats.careerTotals.regularSeason?.avgToi,
+        regGamesPlayed: playerStats.careerTotals?.regularSeason?.gamesPlayed ?? null,
+        regGoals: playerStats.careerTotals?.regularSeason?.goals ?? null,
+        regAssists: playerStats.careerTotals?.regularSeason?.assists ?? null,
+        regPoints: playerStats.careerTotals?.regularSeason?.points ?? null,
+        regGameWinningGoals: playerStats.careerTotals?.regularSeason?.gameWinningGoals ?? null,
+        regOtGoals: playerStats.careerTotals?.regularSeason?.otGoals ?? null,
+        regShootingPctg: playerStats.careerTotals?.regularSeason?.shootingPctg ?? null,
+        regPlusMinus: playerStats.careerTotals?.regularSeason?.plusMinus ?? null,
+        regTimeOnIce: convertTimeOnIce(playerStats.careerTotals?.regularSeason?.avgToi) ?? null,
         // GOALIE
-        regSavePctg: playerStats.careerTotals.regularSeason?.savePctg,
-        regShutouts: playerStats.careerTotals.regularSeason?.shutouts,
-        regGoalsAgainst: playerStats.careerTotals.regularSeason?.goalsAgainst,
-        regGoalsAgainstAvg: playerStats.careerTotals.regularSeason?.goalsAgainstAvg,
-        regShotsAgainst: playerStats.careerTotals.regularSeason?.shotsAgainst,
+        regSavePctg: playerStats.careerTotals?.regularSeason?.savePctg ?? null,
+        regShutouts: playerStats.careerTotals?.regularSeason?.shutouts ?? null,
+        regGoalsAgainst: playerStats.careerTotals?.regularSeason?.goalsAgainst ?? null,
+        regGoalsAgainstAvg: playerStats.careerTotals?.regularSeason?.goalsAgainstAvg ?? null,
+        regShotsAgainst: playerStats.careerTotals?.regularSeason?.shotsAgainst ?? null,
         
         // ** PLAYOFFS **
         // SKATER
-        playGamesPlayed: playerStats.careerTotals.playoffs?.gamesPlayed,
-        playGoals: playerStats.careerTotals.playoffs?.goals,
-        playAssists: playerStats.careerTotals.playoffs?.assists,
-        playPoints: playerStats.careerTotals.playoffs?.points,
-        playGameWinningGoals: playerStats.careerTotals.playoffs?.gameWinningGoals,
-        playOtGoals: playerStats.careerTotals.playoffs?.otGoals,
-        playShootingPctg: playerStats.careerTotals.playoffs?.shootingPctg,
-        playPlusMinus: playerStats.careerTotals.playoffs?.plusMinus,
-        playTimeOnIce: playerStats.careerTotals.playoffs?.avgToi,
+        playGamesPlayed: playerStats.careerTotals?.playoffs?.gamesPlayed ?? null,
+        playGoals: playerStats.careerTotals?.playoffs?.goals ?? null,
+        playAssists: playerStats.careerTotals?.playoffs?.assists ?? null,
+        playPoints: playerStats.careerTotals?.playoffs?.points ?? null,
+        playGameWinningGoals: playerStats.careerTotals?.playoffs?.gameWinningGoals ?? null,
+        playOtGoals: playerStats.careerTotals?.playoffs?.otGoals ?? null,
+        playShootingPctg: playerStats.careerTotals?.playoffs?.shootingPctg ?? null,
+        playPlusMinus: playerStats.careerTotals?.playoffs?.plusMinus ?? null,
+        playTimeOnIce: convertTimeOnIce(playerStats.careerTotals?.playoffs?.avgToi) ?? null,
         // GOALIE
-        playSavePctg: playerStats.careerTotals.playoffs?.savePctg,
-        playShutouts: playerStats.careerTotals.playoffs?.shutouts,
-        playGoalsAgainst: playerStats.careerTotals.playoffs?.goalsAgainst,
-        playGoalsAgainstAvg: playerStats.careerTotals.playoffs?.goalsAgainstAvg,
-        playShotsAgainst: playerStats.careerTotals.playoffs?.shotsAgainst,        
+        playSavePctg: playerStats.careerTotals?.playoffs?.savePctg ?? null,
+        playShutouts: playerStats.careerTotals?.playoffs?.shutouts ?? null,
+        playGoalsAgainst: playerStats.careerTotals?.playoffs?.goalsAgainst ?? null,
+        playGoalsAgainstAvg: playerStats.careerTotals?.playoffs?.goalsAgainstAvg ?? null,
+        playShotsAgainst: playerStats.careerTotals?.playoffs?.shotsAgainst ?? null,        
         
     };    
     return player;    
@@ -109,8 +109,5 @@ console.log(playerData);
 
 // TODO:
 
-// 1. careerTotals itself can be undefined — optional chaining after it doesn't protect the access to it, will throw on no-career-games players
-// 2. This function currently does fetch + normalize in one step — decide if that's intentional or should split into two functions
-// 3. avgToi isn't run through convertTimeOnIce — raw "MM:SS" string being assigned to a field typed number | null
-// 4. Optional chaining produces undefined on a broken chain, but the interface declares number | null — type/value mismatch
+// 2. normalization on this step too?
 // 5. No guard for fetchData returning undefined on failure — playerStats.playerId would throw (same deferred gap as search function)
