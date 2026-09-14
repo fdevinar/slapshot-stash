@@ -20,17 +20,10 @@ export function convertTimeOnIce(value: string | null = null): number | null {
 }
 
 // GENERIC FETCH DATA
-export async function fetchData(url: string) {
-    try {
-        const response = await fetch(url);
-        if(!response.ok) {
-            console.log(`Error: ${response.status}`);     
-            return;       
-        }
-        const data = await response.json();                                
-        return data;
+export async function fetchData(url: string) {    
+    const response = await fetch(url);
+    if(!response.ok) {
+        throw new Error(`NHL API Request failed with: ${response.status} - ${response.statusText}`);                        
     }
-    catch (error) {
-        console.log(error);        
-    }
+    return await response.json();                                    
 }

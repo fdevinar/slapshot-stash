@@ -47,12 +47,23 @@ interface LandingData {
 }
                 
 // FETCH PLAYER FROM NHL API
-async function fetchPlayerData(id: number): Promise<LandingData> {
-                    
-    const playerUrl = `https://api-web.nhle.com/v1/player/${id}/landing`;
+async function fetchPlayerData(id: number): Promise<LandingData> {                    
+    
+    const playerUrl = `https://api-web.nhle.com/v1/player/${id}/landing`;        
     const playerStats = await fetchData(playerUrl);
-        
-    const player = {
+    return normalizeData(playerStats);                    
+}
+
+try {
+    const playerData = await fetchPlayerData(8466139);
+    console.log(playerData);
+}
+catch(error) {
+    console.log(error);
+}
+
+function normalizeData(playerStats: any): LandingData {
+    return {
         // ** BASIC STATS **
         id: playerStats.playerId,
         firstName: playerStats.firstName.default,
@@ -97,17 +108,6 @@ async function fetchPlayerData(id: number): Promise<LandingData> {
         playShutouts: playerStats.careerTotals?.playoffs?.shutouts ?? null,
         playGoalsAgainst: playerStats.careerTotals?.playoffs?.goalsAgainst ?? null,
         playGoalsAgainstAvg: playerStats.careerTotals?.playoffs?.goalsAgainstAvg ?? null,
-        playShotsAgainst: playerStats.careerTotals?.playoffs?.shotsAgainst ?? null,        
-        
+        playShotsAgainst: playerStats.careerTotals?.playoffs?.shotsAgainst ?? null,                
     };    
-    return player;    
 }
-
-const playerData = await fetchPlayerData(8466139);
-
-console.log(playerData);
-
-// TODO:
-
-// 2. normalization on this step too?
-// 5. No guard for fetchData returning undefined on failure — playerStats.playerId would throw (same deferred gap as search function)
