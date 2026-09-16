@@ -47,20 +47,20 @@ interface LandingData {
 }
                 
 // FETCH PLAYER FROM NHL API
-async function fetchPlayerData(id: number): Promise<LandingData> {                    
+export async function fetchPlayerData(id: number): Promise<LandingData> {                    
     
     const playerUrl = `https://api-web.nhle.com/v1/player/${id}/landing`;        
     const playerStats = await fetchData(playerUrl);
     return normalizeData(playerStats);                    
 }
 
-try {
-    const playerData = await fetchPlayerData(8466139);
-    console.log(playerData);
-}
-catch(error) {
-    console.log(error);
-}
+// try {
+//     const playerData = await fetchPlayerData(8466139);
+//     console.log(playerData);
+// }
+// catch(error) {
+//     console.log(error);
+// }
 
 function normalizeData(playerStats: any): LandingData {
     return {

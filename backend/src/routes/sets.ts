@@ -11,8 +11,7 @@ interface UserRouteParams {
 router.post('/', async (req: Request, res: Response) => {
     const name = req.body.name;
     if (typeof name !== 'string' || name.trim() === '') {
-        res.status(400).json({error: 'Name is required'});
-        return;
+        return res.status(400).json({error: 'Name is required'});        
     }
     const newSet = await createSet(name);
     console.log(newSet);
@@ -26,13 +25,11 @@ router.get('/', async (req: Request, res: Response) => {
 router.get('/:id', async (req: Request<UserRouteParams>, res: Response) => {    
     const setId = parseInt(req.params.id, 10);
     if (isNaN(setId)) {
-        res.status(400).json({error: 'ID must be a valid number'});
-        return;
+        return res.status(400).json({error: 'ID must be a valid number'});        
     }
     const set = await getSetbyId(setId);
     if (!set) {
-        res.status(404).json({error: 'Set not found'});
-        return;
+        return res.status(404).json({error: 'Set not found'});        
     }
     console.log(set);
     res.status(200).json(set);
@@ -40,18 +37,15 @@ router.get('/:id', async (req: Request<UserRouteParams>, res: Response) => {
 router.put('/:id', async (req: Request<UserRouteParams>, res: Response) => {
     const setId = parseInt(req.params.id, 10);
     if (isNaN(setId)) {
-        res.status(400).json({error: 'ID must be a valid number'});
-        return;
+        return res.status(400).json({error: 'ID must be a valid number'});        
     }
     const name = req.body.name;
     if (typeof name !== 'string' || name.trim() === '') {
-        res.status(400).json({error: 'Name is required'});
-        return;
+        return res.status(400).json({error: 'Name is required'});        
     }
     const set = await updateSetById(setId, name);
     if (!set) {
-        res.status(404).json({error: 'Set not found'});
-        return;
+        return res.status(404).json({error: 'Set not found'});        
     }
     console.log(set);
     res.status(200).json(set);
@@ -59,13 +53,11 @@ router.put('/:id', async (req: Request<UserRouteParams>, res: Response) => {
 router.delete('/:id', async (req: Request<UserRouteParams>, res: Response) => {    
     const setId = parseInt(req.params.id, 10);
     if (isNaN(setId)) {
-        res.status(400).json({error: 'ID must be a valid number'});
-        return;
+        return res.status(400).json({error: 'ID must be a valid number'});        
     }
     const set = await deleteSetbyId(setId);
     if (!set) {
-        res.status(404).json({error: 'Set not found'});
-        return;
+        return res.status(404).json({error: 'Set not found'});        
     }
     console.log(set);
     res.status(200).json(set);
