@@ -2,7 +2,7 @@ import { fetchData, convertTimeOnIce } from "../utils/helpers.js";
 
 interface LandingData {        
     // ** BASIC STATS **
-    id: number;
+    player_id: number;
     firstName: string,
     lastName: string,
     position: string;
@@ -65,7 +65,7 @@ export async function fetchPlayerData(id: number): Promise<LandingData> {
 function normalizeData(playerStats: any): LandingData {
     return {
         // ** BASIC STATS **
-        id: playerStats.playerId,
+        player_id: playerStats.playerId,
         firstName: playerStats.firstName.default,
         lastName: playerStats.lastName.default,
         position: playerStats.position,        

@@ -5,7 +5,7 @@ drop table if exists "player_cache";
 create table "player_cache" (
 --   BASIC
   "player_id" INT not null,
-  "stats_updated_at" TIMESTAMP not null default now(),
+  "last_updated" TIMESTAMP not null default now(),
   "first_name" varchar(255) not null,
   "last_name" varchar(255) not null,
   "position" varchar(255) not null,
