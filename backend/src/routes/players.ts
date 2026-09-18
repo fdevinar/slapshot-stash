@@ -2,6 +2,7 @@ import { Router } from "express";
 import type { Request, Response } from "express";
 import { fetchPlayerId } from '../services/playerSearch.js';
 import { fetchPlayerData } from '../services/playerLanding.js';
+// import { upsertPlayer } from '../services/playerCache.js';
 
 const router = Router();
 
@@ -30,8 +31,14 @@ router.get('/:id', async (req: Request<UserRouteParams>, res: Response) => {
     const playerData = await fetchPlayerData(playerId);
     if (!playerData) {
         return res.status(404).json({error: 'Player not found'});        
-    }
+    }    
     console.log(playerData);
+
+    // console.log("DB UPSERT TRY...");
+    // upsertPlayer(playerData);
+
+
+
     res.status(200).json(playerData);    
 });
 

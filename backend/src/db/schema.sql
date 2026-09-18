@@ -9,6 +9,7 @@ create table "player_cache" (
   "first_name" varchar(255) not null,
   "last_name" varchar(255) not null,
   "position" varchar(255) not null,
+  "sweater_number" varchar(255) not null,
   "birth_country" varchar(255) not null,
   "is_active" BOOLEAN not null,
   "current_team" varchar(255) null,

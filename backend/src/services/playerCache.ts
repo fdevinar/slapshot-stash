@@ -47,55 +47,65 @@ interface LandingData {
 }
 
 export async function upsertPlayer(player: LandingData): Promise<LandingData> {
+
+    const playerParams = [player.player_id, player.firstName, player.lastName, player.position, player.sweaterNumber, player.birthCountry, player.isActive, player.currentTeam, player.regGamesPlayed,
+        player.regGoals, player.regAssists, player.regPoints, player.regGameWinningGoals, player.regOtGoals, player.regShootingPctg, player.regPlusMinus, player.regTimeOnIce,
+        player.regSavePctg, player.regShutouts, player.regGoalsAgainst, player.regGoalsAgainstAvg, player.regShotsAgainst, player.playGamesPlayed, player.playGoals,
+        player.playAssists, player.playPoints, player.playGameWinningGoals, player.playOtGoals, player.playShootingPctg, player.playPlusMinus, player.playTimeOnIce,
+        player.playSavePctg, player.playShutouts, player.playGoalsAgainst, player.playGoalsAgainstAvg, player.playShotsAgainst]
     
     const sqlQuery =`INSERT INTO player_cache (
-    player_id, firstName, lastName, position, sweaterNumber, birthCountry, isActive, currentTeam, regGamesPlayed,
-    regGoals, regAssists, regPoints, regGameWinningGoals, regOtGoals, regShootingPctg, regPlusMinus, regTimeOnIce,
-    regSavePctg, regShutouts, regGoalsAgainst, regGoalsAgainstAvg, regShotsAgainst, playGamesPlayed, playGoals,
-    playAssists, playPoints, playGameWinningGoals, playOtGoals, playShootingPctg, playPlusMinus, playTimeOnIce,
-    playSavePctg, playShutouts, playGoalsAgainst, playGoalsAgainstAvg, playShotsAgainst, last_updated)
+    player_id, first_name, last_name, position, sweater_number, birth_country, is_active, current_team, reg_games_played,
+    reg_goals, reg_assists, reg_points, reg_game_winning_goals, reg_ot_goals, reg_shooting_pctg, reg_plus_minus, reg_time_on_ice,
+    reg_save_pctg, reg_shutouts, reg_goals_against, reg_goals_against_avg, reg_shots_against, play_games_played, play_goals,
+    play_assists, play_points, play_game_winning_goals, play_ot_goals, play_shooting_pctg, play_plus_minus, play_time_on_ice,
+    play_save_pctg, play_shutouts, play_goals_against, play_goals_against_avg, play_shots_against, last_updated)
+                    
                     VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14, $15, $16, $17,
-                    $18, $19, $20, $21, $22, $23, $24, $25, $26, $27, $28, $29, $30, $31, $32, $33, $34, $35, now())
+                    $18, $19, $20, $21, $22, $23, $24, $25, $26, $27, $28, $29, $30, $31, $32, $33, $34, $35, $36, now())
+                    
                     ON CONFLICT (player_id)
                     DO UPDATE SET
-                    firstName = EXCLUDED.firstName,
-                    lastName = EXCLUDED.lastName,
+                    
+                    first_name = EXCLUDED.first_name,
+                    last_name = EXCLUDED.last_name,
                     position = EXCLUDED.position,
-                    sweaterNumber = EXCLUDED.sweaterNumber,
-                    birthCountry = EXCLUDED.birthCountry,
-                    isActive = EXCLUDED.isActive,
-                    currentTeam = EXCLUDED.currentTeam,
-                    regGamesPlayed = EXCLUDED.regGamesPlayed,
-                    regGoals = EXCLUDED.regGoals,
-                    regAssists = EXCLUDED.regAssists,
-                    regPoints = EXCLUDED.regPoints,
-                    regGameWinningGoals = EXCLUDED.regGameWinningGoals,
-                    regOtGoals = EXCLUDED.regOtGoals,
-                    regShootingPctg = EXCLUDED.regShootingPctg,
-                    regPlusMinus = EXCLUDED.regPlusMinus,
-                    regTimeOnIce = EXCLUDED.regTimeOnIce,
-                    regSavePctg = EXCLUDED.regSavePctg,
-                    regShutouts = EXCLUDED.regShutouts,
-                    regGoalsAgainst = EXCLUDED.regGoalsAgainst,
-                    regGoalsAgainstAvg = EXCLUDED.regGoalsAgainstAvg,
-                    regShotsAgainst = EXCLUDED.regShotsAgainst,
-                    playGamesPlayed = EXCLUDED.playGamesPlayed,
-                    playGoals = EXCLUDED.playGoals,
-                    playAssists = EXCLUDED.playAssists,
-                    playPoints = EXCLUDED.playPoints,
-                    playGameWinningGoals = EXCLUDED.playGameWinningGoals,
-                    playOtGoals = EXCLUDED.playOtGoals,
-                    playShootingPctg = EXCLUDED.playShootingPctg,
-                    playPlusMinus = EXCLUDED.playPlusMinus,
-                    playTimeOnIce = EXCLUDED.playTimeOnIce,
-                    playSavePctg = EXCLUDED.playSavePctg,
-                    playShutouts = EXCLUDED.playShutouts,
-                    playGoalsAgainst = EXCLUDED.playGoalsAgainst,
-                    playGoalsAgainstAvg = EXCLUDED.playGoalsAgainstAvg,
-                    playShotsAgainst = EXCLUDED.playShotsAgainst,
-                    last_updated = now();`;    
+                    sweater_number = EXCLUDED.sweater_number,
+                    birth_country = EXCLUDED.birth_country,
+                    is_active = EXCLUDED.is_active,
+                    current_team = EXCLUDED.current_team,
+                    reg_games_played = EXCLUDED.reg_games_played,
+                    reg_goals = EXCLUDED.reg_goals,
+                    reg_assists = EXCLUDED.reg_assists,
+                    reg_points = EXCLUDED.reg_points,
+                    reg_game_winning_goals = EXCLUDED.reg_game_winning_goals,
+                    reg_ot_goals = EXCLUDED.reg_ot_goals,
+                    reg_shooting_pctg = EXCLUDED.reg_shooting_pctg,
+                    reg_plus_minus = EXCLUDED.reg_plus_minus,
+                    reg_time_on_ice = EXCLUDED.reg_time_on_ice,
+                    reg_save_pctg = EXCLUDED.reg_save_pctg,
+                    reg_shutouts = EXCLUDED.reg_shutouts,
+                    reg_goals_against = EXCLUDED.reg_goals_against,
+                    reg_goals_against_avg = EXCLUDED.reg_goals_against_avg,
+                    reg_shots_against = EXCLUDED.reg_shots_against,
+                    play_games_played = EXCLUDED.play_games_played,
+                    play_goals = EXCLUDED.play_goals,
+                    play_assists = EXCLUDED.play_assists,
+                    play_points = EXCLUDED.play_points,
+                    play_game_winning_goals = EXCLUDED.play_game_winning_goals,
+                    play_ot_goals = EXCLUDED.play_ot_goals,
+                    play_shooting_pctg = EXCLUDED.play_shooting_pctg,
+                    play_plus_minus = EXCLUDED.play_plus_minus,
+                    play_time_on_ice = EXCLUDED.play_time_on_ice,
+                    play_save_pctg = EXCLUDED.play_save_pctg,
+                    play_shutouts = EXCLUDED.play_shutouts,
+                    play_goals_against = EXCLUDED.play_goals_against,
+                    play_goals_against_avg = EXCLUDED.play_goals_against_avg,
+                    play_shots_against = EXCLUDED.play_shots_against,
+                    last_updated = now()
+                    RETURNING *;`;
 
-    const result = await pool.query(sqlQuery, [player]);
+    const result = await pool.query(sqlQuery, playerParams);
 
     return result.rows[0];
 }
