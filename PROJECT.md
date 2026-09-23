@@ -1,4 +1,190 @@
-# Hockey Card Collection Tracker — Project Brief
+# Slapshot Stash — Hockey Card Collection Tracker
+
+## Purpose
+Portfolio project for fullstack developer roles (targeting mid-size companies).
+Personal-use app to manage a hockey card collection, enriched with live NHL data.
+
+## Status
+**Phase 3 (NHL API Integration) — complete.** The full backend loop for the
+2-screen MVP is built and tested end to end: player search → disambiguation →
+cache upsert → card creation → joined card listing. Frontend (Phase 6) is next.
+
+---
+
+## Stack
+- Backend: Node.js + Express 5 + TypeScript (ESM)
+- Database: PostgreSQL
+- Frontend: React (not yet started)
+- No login/register — single-user, personal-use tool
+- Monorepo structure: `slapshot-stash/backend/`
+
+## External API
+- NHL data via the unofficial NHL API (`api-web.nhle.com`, stats via `api.nhle.com/stats/rest`)
+- No API key required, but undocumented/unofficial — all calls isolated behind
+  a dedicated service layer (`services/players.ts`, `services/playerCache.ts`)
+
+## Build order (phases)
+1. **Foundation** — ✅ complete
+2. **Core CRUD** — ✅ complete (`sets` full CRUD, all three table schemas)
+3. **NHL API integration** — ✅ complete (see below)
+4. **Caching refinement (staleness/refresh)** — deferred, see "Deferred to a later phase"
+5. **Background job** — deferred alongside Phase 4
+6. **Frontend** — next up
+7. **Polish/stretch** — image upload, estimated collection value, "Create a Team", deployment
+
+### Workflow
+- Working in Claude Desktop free plan, using Projects (not Claude Code)
+- This file lives in the project's knowledge base so every chat starts with context
+- One phase (or sub-scope) per chat session where practical
+- Fabricio writes all code himself; Claude provides architectural reasoning,
+  tradeoffs, and pointers — not ready-made solutions
+- `experiments/` folder outside `src/` used for throwaway NHL API exploration
+  before committing to implementation patterns
+
+---
+
+## Confirmed functional design
+
+### Core Model
+- **Players are never added directly.** They only enter the system as a
+  side-effect of *selecting* a player during the Add Card flow — no
+  standalone "add player" or "browse players" screen. This keeps the app a
+  card tracker, not a stats app.
+- **Cards are the only entity the user creates directly.**
+- **Sets** are simple, user-created, and few in number (name + year). Used
+  purely for filtering — no set-completion tracking. Creating sets via the UI
+  is out of MVP scope; the current 3 sets are inserted manually in the DB.
+
+### Entities
+
+**Set** — name, year
+
+**Card** — references one player (NHL player ID) and one set; unique
+constraint on `(player_id, set_id)` enforces "no duplicate tracking" (a
+repeat acquisition is just tracked as the same card). No condition/grade,
+no value.
+
+**Player (`player_cache`, not user-managed)** — one wide table with
+nullable, position-specific columns (skater and goalie fields coexist
+rather than split tables). `player_id` (NHL's own ID) is the primary key —
+no surrogate key. Fields: name, position, sweater number, birth country,
+active/retired status, current/last-known team, full regular-season and
+playoff career totals (GP/G/A/P/GWG/OT goals/shooting%/+-‑/TOI, plus
+goalie-specific save%/shutouts/GAA/shots against). TOI stored as integer
+seconds. PPG is computed at response time only, never stored. A
+`last_updated` timestamp is set via SQL `now()` (not app code) on every
+insert or update.
+
+### Confirmed 2-screen MVP
+
+**Screen 1 — My Collection**
+- One wide table, one row per owned card, every available stat column
+  visible (cell greyed out when the value is null)
+- No filtering — only sorting, by clicking any column header (ASC/DESC)
+- "Add Card" button navigates to Screen 2
+
+**Screen 2 — Add Card**
+- Step 1: search by first/last name → candidate list for disambiguation
+  (full name, position, team, sweater number) → selecting a candidate
+  triggers fetch → normalize → upsert into `player_cache`
+- Step 2: pick a set from a dropdown of existing sets (no create-set UI in
+  MVP)
+- "Create Card" button inserts the card, referencing the now-cached
+  `player_id` and chosen `set_id`
+
+### Deferred to a later phase
+- **Staleness checking and cache refresh.** The Collection screen reads
+  `player_cache` as-is, with no freshness check. A manual "refresh this
+  player's data" button (active players only) is planned for a later phase,
+  once the MVP is working end to end — deliberately not solved now just
+  because it would be easier to.
+- Retry/backoff logic with 4xx/5xx distinction
+- Formal Repository interface pattern
+- Apostrophe/quote escaping in the NHL search API's `cayenneExp` expressions
+- Consistent, differentiated error handling (e.g. a friendly response for
+  the `cards_player_set_unique` constraint violation instead of a generic
+  500) — confirmed working as a generic error for now, "perfect path first"
+
+---
+
+## Backend implementation notes
+
+### Services (`services/`)
+- **`players.ts`** — NHL API only, two responsibilities kept in one small
+  file for now, split further if it grows crowded:
+  - `fetchPlayerId(firstName, lastName)` — search endpoint, returns
+    transient `PlayerData[]` candidates (`id`, `fullName`, `positionCode`,
+    `sweaterNumber`, `currentTeamId | null`); never touches the DB
+  - `fetchPlayerData(id)` — landing endpoint, raw fetch only
+  - `normalizeData(raw)` — pure, synchronous transform: raw NHL landing
+    JSON → internal `LandingData` shape (career totals flattened with
+    `reg`/`play` prefixes, `avgToi` converted via `convertTimeOnIce`,
+    missing values coalesced to `null` explicitly per field)
+- **`playerCache.ts`** — DB only. `upsertPlayer(player: LandingData)` runs
+  a single `INSERT ... ON CONFLICT (player_id) DO UPDATE SET ...`, using
+  `EXCLUDED.<column>` to reference incoming values by name (avoids
+  positional-parameter mismatches across ~28+ columns), with
+  `RETURNING *`.
+- **`cards.ts`** — DB only. `createCard(playerId, setId)` — simple insert
+  with `RETURNING *`. Card listing query joins `cards`, `player_cache`, and
+  `sets` (plain `JOIN`, not `LEFT JOIN` — FK constraints guarantee every
+  card has a valid player and set) into one flat `CardDetails` row per
+  card, kept as a separate type from the plain `Card` interface
+  (`{id, playerId, setId}`) that `createCard` returns.
+- **`utils/helpers.ts`** — shared, domain-agnostic utilities only:
+  `fetchData` (generic fetch + JSON parse, throws `Error` on a non-ok
+  response or network/parse failure — does not swallow errors), and
+  `convertTimeOnIce`.
+
+### Error handling pattern
+- `fetchData` throws on failure instead of returning `undefined`
+- Individual service functions (`fetchPlayerId`, `fetchPlayerData`) do
+  **not** add their own try/catch unless they have a real fallback to
+  produce — right now, none do, so errors propagate untouched
+- Confirmed: Express 5 automatically forwards a rejected promise from an
+  `async` route handler to the error-handling middleware (`errorHandler`,
+  in place since Phase 1) — no explicit try/catch needed in route handlers
+  for this to work
+- The one place a try/catch will eventually do real work is the planned
+  stale-cache fallback (deferred, see above) — which is exactly why fetch
+  and normalization were split into separate functions: the catch only
+  needs to wrap the fetch, not the normalization logic after it
+
+### Routes
+- `GET /players/search?firstName=&lastName=` — query-param validation
+  (presence + `typeof === 'string'`), calls `fetchPlayerId`, no try/catch
+- `GET /players/:id` — `parseInt`/`isNaN` guard on the route param, calls
+  `fetchPlayerData` + `normalizeData`, returns live (not yet persisted)
+  data
+- `POST /cards` — body validation via `typeof playerId !== 'number'` (JSON
+  bodies preserve real types, unlike query params), calls `createCard`
+- `GET /cards` — returns the joined `CardDetails[]` list
+
+### Key lessons carried forward
+- TypeScript types/casts have **zero runtime effect** — they're
+  documentation, not a contract. A cast or declared return type doesn't
+  transform or filter the actual object at runtime.
+- A `try/catch` only earns its place when the `catch` block has something
+  real to do (a fallback value, meaningful extra context); otherwise it's
+  noise between the failure and whoever can actually act on it.
+- Throw for genuine failures (network down, upstream 4xx/5xx); return
+  `null`/empty for legitimate, expected "found nothing" outcomes (e.g. a
+  `sets` lookup by ID that matches no row). Both are correct — the right
+  one depends on whether the underlying operation is signaling failure or
+  signaling success-with-nothing.
+
+---
+
+## Open Questions / Notes
+*(running log — add anything unresolved as it comes up)*
+
+- Frontend kickoff: 3 decisions to settle before writing the first
+  component — (1) React Router with real URLs vs. simple local-state
+  toggle between the 2 screens; (2) a separate `api/` fetch module vs.
+  calling `fetch` directly in components; (3) unstyled-for-now vs. a
+  minimal CSS pass so the wide Collection table stays readable
+
+<!-- # Hockey Card Collection Tracker — Project Brief
 
 ## Purpose
 Portfolio project for fullstack developer roles (targeting mid-size companies).
@@ -243,7 +429,7 @@ sensibly without at least this much of it. The proactive/scheduled
 - FK delete behavior for `cards` → `sets` / `cards` → `player_cache` not yet
   decided (not urgent — single user, low accidental-delete risk).
 - Whether to eventually add pagination to `GET /sets`-style list endpoints
-  (not urgent at current/expected data volume).
+  (not urgent at current/expected data volume). -->
 
 <!-- # SLAPSHOT STASH - Hockey Card Collection Tracker — Project Brief
 
