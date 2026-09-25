@@ -61,7 +61,7 @@ function App() {
     const data = await response.json();
     if (data) {
         console.log("Fetched cards:");
-        console.log(data);
+        // console.log(data);
     }
     // setRuns(data);    
     // return data;
@@ -79,123 +79,125 @@ function App() {
       <main>
         <h1>SLAPSHOT STASH</h1>     
         
-        <div className="main-cards">
+          <table>
 
-        
+            <thead>
+              <tr>
+                <th className='empty'></th>
+                <th className='empty'></th>
+                <th className='empty'></th>
+                <th className='empty'></th>
+                <th className='empty'></th>
+                <th className='regular' colSpan={14}>REGULAR SEASON</th>
+                <th className='playoffs' colSpan={14}>PLAYOFFS</th>
+                
+              </tr>
+            </thead>
+            <thead>
+              <tr>
+                {/* <th>card_id</th>
+                <th>set_id</th>
+                <th>set_name</th> */}
+                {/* // ** BASIC STATS ** */}
+                {/* <th>player_id</th>
+                <th>last_updated</th> */}
+                {/* <th>first_name</th> */}
+                <th>Name</th>
+                <th>POS</th>
+                <th>#</th>
+                <th>Country</th>
+                {/* <th>is_active</th> */}
+                <th>Team</th>
+                {/* // ** REGULAR SEASON **
+                // SKATER */}
+                <th>Games</th>
+                <th>Goals</th>
+                <th>Assists</th>
+                <th>Points</th>
+                <th>Game Winning Goals</th>
+                <th>OT Goals</th>
+                <th>Shoot %</th>
+                <th>+/-</th>
+                <th>TOI</th>
+                {/* // GOALIE */}                
+                <th>Save %</th>
+                <th>Shutouts</th>
+                <th>Goals Against</th>
+                <th>Goals Against Avg</th>
+                <th>Shots Against</th>
+                {/* // ** PLAYOFFS **
+                // SKATER */}
+                <th>Games</th>
+                <th>Goals</th>
+                <th>Assists</th>
+                <th>Points</th>
+                <th>Game Winning Goals</th>
+                <th>OT Goals</th>
+                <th>Shoot %</th>
+                <th>+/-</th>
+                <th>TOI</th>
+                {/* // GOALIE */}
+                <th>Save %</th>
+                <th>Shutouts</th>
+                <th>Goals Against</th>
+                <th>Goals Against Avg</th>
+                <th>Shots Against</th>
+              </tr>                      
+            </thead>
 
-          <ul className="cards-wrapper subtitle">
-            
-            <li className="card">
-              <span>card_id</span>
-              <span>set_id</span>
-              <span>set_name</span>
-              {/* // ** BASIC STATS ** */}
-              <span>player_id</span>
-              <span>last_updated</span>
-              <span>first_name</span>
-              <span>last_name</span>
-              <span>position</span>
-              <span>sweater_number</span>
-              <span>birth_country</span>
-              <span>is_active</span>
-              <span>current_team</span>
-              {/* // ** REGULAR SEASON **
-              // SKATER */}
-              <span>reg_games_played</span>
-              <span>reg_goals</span>
-              <span>reg_assists</span>
-              <span>reg_points</span>
-              <span>reg_game_winning_goals</span>
-              <span>reg_ot_goals</span>
-              <span>reg_shooting_pctg</span>
-              <span>reg_plus_minus</span>
-              <span>reg_time_on_ice</span>
-              {/* // GOALIE */}
-              <span>reg_save_pctg</span>
-              <span>reg_shutouts</span>
-              <span>reg_goals_against</span>
-              <span>reg_goals_against_avg</span>
-              <span>reg_shots_against</span>
-              {/* // ** PLAYOFFS **
-              // SKATER */}
-              <span>play_games_played</span>
-              <span>play_goals</span>
-              <span>play_assists</span>
-              <span>play_points</span>
-              <span>play_game_winning_goals</span>
-              <span>play_ot_goals</span>
-              <span>play_shooting_pctg</span>
-              <span>play_plus_minus</span>
-              <span>play_time_on_ice</span>
-              {/* // GOALIE */}
-              <span>play_save_pctg</span>
-              <span>play_shutouts</span>
-              <span>play_goals_against</span>
-              <span>play_goals_against_avg</span>
-              <span>play_shots_against</span>
-            </li>          
-            
-          </ul>
-
-
-
-
-          <ul className="cards-wrapper">
             {cards.map((card) =>
-            <li className="card">
-              <span>{card.card_id}</span>
-              <span>{card.set_id}</span>
-              <span>{card.set_name}</span>
+            <tr>
+              {/* <td>{card.card_id}</td>
+              <td>{card.set_id}</td>
+              <td>{card.set_name}</td> */}
               {/* // ** BASIC STATS ** */}
-              <span>{card.player_id}</span>
-              <span>{card.last_updated}</span>
-              <span>{card.first_name}</span>
-              <span>{card.last_name}</span>
-              <span>{card.position}</span>
-              <span>{card.sweater_number}</span>
-              <span>{card.birth_country}</span>
-              <span>{card.is_active}</span>
-              <span>{card.current_team}</span>
+              {/* <td>{card.player_id}</td>
+              <td>{card.last_updated}</td> */}
+              <td>{card.first_name} {card.last_name}</td>
+              {/* <td>{card.last_name}</td> */}
+              <td>{card.position}</td>
+              <td>{card.sweater_number}</td>
+              <td>{card.birth_country}</td>
+              {/* <td>{card.is_active}</td> */}
+              <td>{card.current_team}</td>
               {/* // ** REGULAR SEASON **
               // SKATER */}
-              <span>{card.reg_games_played}</span>
-              <span>{card.reg_goals}</span>
-              <span>{card.reg_assists}</span>
-              <span>{card.reg_points}</span>
-              <span>{card.reg_game_winning_goals}</span>
-              <span>{card.reg_ot_goals}</span>
-              <span>{card.reg_shooting_pctg}</span>
-              <span>{card.reg_plus_minus}</span>
-              <span>{card.reg_time_on_ice}</span>
+              <td>{card.reg_games_played}</td>
+              <td>{card.reg_goals}</td>
+              <td>{card.reg_assists}</td>
+              <td>{card.reg_points}</td>
+              <td>{card.reg_game_winning_goals}</td>
+              <td>{card.reg_ot_goals}</td>
+              <td>{card.reg_shooting_pctg}</td>
+              <td>{card.reg_plus_minus}</td>
+              <td>{card.reg_time_on_ice}</td>
               {/* // GOALIE */}
-              <span>{card.reg_save_pctg}</span>
-              <span>{card.reg_shutouts}</span>
-              <span>{card.reg_goals_against}</span>
-              <span>{card.reg_goals_against_avg}</span>
-              <span>{card.reg_shots_against}</span>
+              <td>{card.reg_save_pctg}</td>
+              <td>{card.reg_shutouts}</td>
+              <td>{card.reg_goals_against}</td>
+              <td>{card.reg_goals_against_avg}</td>
+              <td>{card.reg_shots_against}</td>
               {/* // ** PLAYOFFS **
               // SKATER */}
-              <span>{card.play_games_played}</span>
-              <span>{card.play_goals}</span>
-              <span>{card.play_assists}</span>
-              <span>{card.play_points}</span>
-              <span>{card.play_game_winning_goals}</span>
-              <span>{card.play_ot_goals}</span>
-              <span>{card.play_shooting_pctg}</span>
-              <span>{card.play_plus_minus}</span>
-              <span>{card.play_time_on_ice}</span>
+              <td>{card.play_games_played}</td>
+              <td>{card.play_goals}</td>
+              <td>{card.play_assists}</td>
+              <td>{card.play_points}</td>
+              <td>{card.play_game_winning_goals}</td>
+              <td>{card.play_ot_goals}</td>
+              <td>{card.play_shooting_pctg}</td>
+              <td>{card.play_plus_minus}</td>
+              <td>{card.play_time_on_ice}</td>
               {/* // GOALIE */}
-              <span>{card.play_save_pctg}</span>
-              <span>{card.play_shutouts}</span>
-              <span>{card.play_goals_against}</span>
-              <span>{card.play_goals_against_avg}</span>
-              <span>{card.play_shots_against}</span>
-            </li>          
+              <td>{card.play_save_pctg}</td>
+              <td>{card.play_shutouts}</td>
+              <td>{card.play_goals_against}</td>
+              <td>{card.play_goals_against_avg}</td>
+              <td>{card.play_shots_against}</td>
+            </tr>          
             )}
-          </ul>
 
-
-        </div>
+          </table>
 
       </main>
     </>

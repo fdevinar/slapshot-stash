@@ -1,34 +1,25 @@
-/* body {
-  background-color: gray;
-} */
-main {
-  background-color: ivory;
-  font-size: 16px;
-}
 
-.main-cards {
-  display: flex;
+h1 {
+  font-size: 36px;
 }
-
-/* TABELA */
-ul.cards-wrapper {  
-  list-style-type: none;  
-  display: flex;
-  flex-wrap: wrap;  
+table {
+  background-color: lightgrey;  
 }
-/* COLUNA */
-ul.cards-wrapper li {  
-  padding: 12px;
-  display: flex;
-  flex-direction: column;  
+table td, table th {
+  font-size: 12px;
+  padding: 2px;
+  border: 0.3px solid black;
+  max-width: 52px;  
 }
-/* ITEM */
-ul.cards-wrapper li span {
-  border: 0.5px solid black;
-  padding: 6px;
-  min-height: 26px;
+table td {
+  font-size: 10px;
 }
-
-ul.cards-wrapper.subtitle li span {
-  background-color: lightgrey;
+table th.regular {
+  background-color: cyan;
+}
+table th.playoffs {
+  background-color: orange;
+}
+table th.empty {
+  border: none;  
 }
