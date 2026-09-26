@@ -13,6 +13,8 @@ main {
 .hero img {
   max-width: 60px;
 }
+
+/* CARD LIST */
 table {
   background-color: lightgrey;  
 }
@@ -35,11 +37,26 @@ table th.empty {
   border: none;  
 }
 
+/* SEARCH */
+.search-container {
+  display: flex;
+  align-items: center;
+  max-width: 75%;
+  margin: 0 auto;
+  width: 100%;
+  margin: 0 auto;
+  gap: 32px;
+}
 table.search {
-  max-width: 600px;
   width: 100%;
   margin: 0 auto;
 }
 table.search tr {
   cursor: pointer;
+}
+form {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  text-align: start;
 }
