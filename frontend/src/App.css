@@ -1,6 +1,17 @@
-
-h1 {
+main {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+.hero {
+  display: flex;
+  justify-content: center;
+}
+.hero h1 {
   font-size: 36px;
+}
+.hero img {
+  max-width: 60px;
 }
 table {
   background-color: lightgrey;  
@@ -22,4 +33,13 @@ table th.playoffs {
 }
 table th.empty {
   border: none;  
+}
+
+table.search {
+  max-width: 600px;
+  width: 100%;
+  margin: 0 auto;
+}
+table.search tr {
+  cursor: pointer;
 }

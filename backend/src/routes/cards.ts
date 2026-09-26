@@ -20,12 +20,12 @@ router.post('/', async (req: Request, res: Response) => {
         return res.status(400).json({error: 'Set ID must be a valid number'});
     }
     const newCard = await createCard(playerId, setId);
-    console.log(newCard);
+    // console.log(newCard);
     res.status(201).json(newCard);
 });
 router.get('/', async (req: Request, res: Response) => {
     const allCards = await getCards();
-    console.log(allCards);
+    // console.log(allCards);
     res.status(200).json(allCards);
 })
 
