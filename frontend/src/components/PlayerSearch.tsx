@@ -1,19 +1,12 @@
-import { useState, useEffect } from "react";
+import { useState } from "react";
+import type { Player } from "../api/types";
 
-export default function PlayerSearch() {
+export default function PlayerSearch( onCardCreated: any ) {
     const [firstName, setFirstName] = useState('');
     const [lastName, setLastName] = useState('');
     const [playerList, setPlayerList] = useState<Player[]>([]);    
 
-    interface Player {
-        id: number,
-        currentTeamId: number,
-        firstName: string,
-        fullName: string,
-        lastName: string,
-        positionCode: string,
-        sweaterNumber: number
-    }
+
 
     async function fetchPlayers(firstName: string, lastName: string) {
         const response = await fetch(`http://localhost:3000/players/search?firstName=${firstName}&lastName=${lastName}`);
@@ -22,6 +15,7 @@ export default function PlayerSearch() {
             console.log('Searched playerlist data:');
             console.log(data);
             setPlayerList(data);
+            onCardCreated();
         }    
     }
     
@@ -30,9 +24,11 @@ export default function PlayerSearch() {
             fetchPlayers(firstName, lastName);                        
     }
 
+    // ON PLAYER SELECTION
     async function playerSelected(player: Player) {                
         await addPlayerToCache(player);        
-        await addCardToTable(player);        
+        await addCardToTable(player);   
+        
     }
 
     async function addPlayerToCache(player: Player) {        

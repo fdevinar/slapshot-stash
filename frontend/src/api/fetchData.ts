@@ -1,25 +1,10 @@
-// export async function fetchCards() {    
-//     const response = await fetch("http://localhost:8080/cards");
-//     const data = await response.json();
-//     if (data) {
-//         console.log("Fetched cards:");
-//         console.log(data);
-//     }
-//     // setRuns(data);
-//     return data;
-//   }
+import type { CardDetails } from '../api/types'
 
-  
-//   async function runSchedule(schedule = randomRequest) {    
-//     const requestOptions = {
-//       method: 'POST',
-//       headers: { 'Content-Type': 'application/json' },
-//       body: JSON.stringify(schedule)
-//       };
-//     const response = await fetch('http://localhost:8080/schedule/execute',requestOptions);
-//     const data = await response.json();
-//     // console.log(data);
-//     fetchRuns();
-//   }
-  
-  
+export async function fetchCards(): Promise<CardDetails[]> {
+    const response = await fetch("http://localhost:3000/cards");
+    const data = await response.json();
+    if (data) {
+        console.log("Cards fetched successfully");        
+    }    
+    return data;
+  }
