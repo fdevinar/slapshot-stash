@@ -1,26 +1,25 @@
 import type { CardDetails } from '../api/types'
 
-interface CardListProps {
+interface CardsTableProps {
   cards: CardDetails[];
 }
 
-export default function CardsTable({cards} : CardListProps) {
-
-    console.log("What are my cards?", cards, Array.isArray(cards));
-
+export default function CardsTable({cards} : CardsTableProps) {
      
+    // TODO: SEPARATE SKATERS AND GOALIES
+
     return (
         
         <table>
             <thead>
               <tr>
-                <th className='empty'></th>
-                <th className='empty'></th>
-                <th className='empty'></th>
-                <th className='empty'></th>
-                <th className='empty'></th>
-                <th className='regular' colSpan={14}>REGULAR SEASON</th>
-                <th className='playoffs' colSpan={14}>PLAYOFFS</th>                
+                <td className='empty'></td>
+                <td className='empty'></td>
+                <td className='empty'></td>
+                <td className='empty'></td>
+                <td className='empty'></td>
+                <td className='regular' colSpan={14}>REGULAR SEASON</td>
+                <td className='playoffs' colSpan={14}>PLAYOFFS</td>                
               </tr>
             </thead>
             <thead>
@@ -32,54 +31,54 @@ export default function CardsTable({cards} : CardListProps) {
                 {/* <th>player_id</th>
                 <th>last_updated</th> */}
                 {/* <th>first_name</th> */}
-                <th>Name</th>
-                <th>POS</th>
-                <th>#</th>
-                <th>Country</th>
-                {/* <th>is_active</th> */}
-                <th>Team</th>
+                <td>Name</td>
+                <td>POS</td>
+                <td>#</td>
+                <td>Country</td>
+                {/* <td>is_active</th> *d}
+                <td>Team</td>
                 {/* // ** REGULAR SEASON **
                 // SKATER */}
-                <th>Games</th>
-                <th>Goals</th>
-                <th>Assists</th>
-                <th>Points</th>
-                <th>Game Winning Goals</th>
-                <th>OT Goals</th>
-                <th>Shoot %</th>
-                <th>+/-</th>
-                <th>TOI</th>
+                <td>Games</td>
+                <td>Goals</td>
+                <td>Assists</td>
+                <td>Points</td>
+                <td>Game Winning Goals</td>
+                <td>OT Goals</td>
+                <td>Shoot %</td>
+                <td>+/-</td>
+                <td>TOI</td>
                 {/* // GOALIE */}                
-                <th>Save %</th>
-                <th>Shutouts</th>
-                <th>Goals Against</th>
-                <th>Goals Against Avg</th>
-                <th>Shots Against</th>
+                <td>Save %</td>
+                <td>Shutouts</td>
+                <td>Goals Against</td>
+                <td>Goals Against Avg</td>
+                <td>Shots Against</td>
                 {/* // ** PLAYOFFS **
                 // SKATER */}
-                <th>Games</th>
-                <th>Goals</th>
-                <th>Assists</th>
-                <th>Points</th>
-                <th>Game Winning Goals</th>
-                <th>OT Goals</th>
-                <th>Shoot %</th>
-                <th>+/-</th>
-                <th>TOI</th>
+                <td>Games</td>
+                <td>Goals</td>
+                <td>Assists</td>
+                <td>Points</td>
+                <td>Game Winning Goals</td>
+                <td>OT Goals</td>
+                <td>Shoot %</td>
+                <td>+/-</td>
+                <td>TOI</td>
                 {/* // GOALIE */}
-                <th>Save %</th>
-                <th>Shutouts</th>
-                <th>Goals Against</th>
-                <th>Goals Against Avg</th>
-                <th>Shots Against</th>
+                <td>Save %</td>
+                <td>Shutouts</td>
+                <td>Goals Against</td>
+                <td>Goals Against Avg</td>
+                <td>Shots Against</td>
               </tr>                      
             </thead>
 
             <tbody>
               {cards.map((card) =>
-              <tr>
-                {/* <td>{card.card_id}</td>
-                <td>{card.set_id}</td>
+              <tr key={card.card_id}>
+                
+                {/*<td>{card.set_id}</td>
                 <td>{card.set_name}</td> */}
                 {/* // ** BASIC STATS ** */}
                 {/* <td>{card.player_id}</td>

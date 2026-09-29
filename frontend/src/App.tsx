@@ -10,28 +10,19 @@ function App() {
 
   const [cards, setCards] = useState<CardDetails[]>([]);
 
-
-  const loadCards = async () => {
-    try {
-      // 1. Await the data to unwrap it from the Promise
-      const data = await fetchCards();     
-      // 2. Pass the raw data, not the Promise      
-      setCards(data); 
+  const loadCards = async () => {  
+    try {      
+      const data = await fetchCards();           
+      setCards(data);      
     } catch (error) {
       console.error("Failed to load cards:", error);
-    }
+    }    
   };
-
-  // TODO: FIX LOOP
-  // TODO: TRIGGER LOAD TO PLAYER SEARCH
-
-  // loadCards();
-  // useEffect(() => {
-  //   loadCards();
-  // }), [];
   
+  useEffect(() => {
+    loadCards();    
+  }, []);
   
-
   return (
     <>
       <main>
@@ -39,11 +30,13 @@ function App() {
           <img src={heroImg} alt="Hero" />
           <h1>SLAPSHOT STASH</h1>     
         </div>
-        <CardsTable cards={cards}></CardsTable>   
-        <PlayerSearch onCardCreated={loadCards} ></PlayerSearch>                     
+        <CardsTable cards={cards}></CardsTable>           
+        <PlayerSearch onCardCreated={loadCards}></PlayerSearch>
       </main>
     </>
   )
 }
 
 export default App
+
+
