@@ -5,6 +5,6 @@ body {
   background-color: ivory;
   font-family: 'Inter', sans-serif;
 }
-p {
+h1, h2, p {
   margin: 0;
 }
