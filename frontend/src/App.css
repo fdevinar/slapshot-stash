@@ -30,7 +30,7 @@ table {
   border-radius: 6px;
   padding: 6px;
 }
-table td {
+table td, table th {
   font-size: 11px;  
   padding: 2px;
   border: 0.3px solid black;  
@@ -41,10 +41,10 @@ table thead td {
   font-size: 12px;
 }
 table th.regular {
-  background-color: cyan;
+  background-color: lightblue;
 }
 table th.playoffs {
-  background-color: orange;
+  background-color: lightcoral;
 }
 table th.empty {
   border: none;  
