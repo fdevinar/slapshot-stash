@@ -3,18 +3,91 @@ import type { CardDetails } from '../api/types'
 interface CardsTableProps {
   cards: CardDetails[];
 }
+interface ColumnConfig<T> {
+  key: keyof T;
+  label: string;
+  sortable: boolean;
+}
 
 export default function CardsTable({cards} : CardsTableProps) {
   
     // TODO: SORTING TABLES
 
 
+    const skaterColumns: ColumnConfig<CardDetails>[] = [        
+      { key: 'first_name', label: "First name", sortable: true},
+      { key: 'last_name', label: "Last name", sortable: true},
+      { key: 'position', label: "Position", sortable: true},
+      { key: 'sweater_number', label: "Sweater #", sortable: true},
+      { key: 'birth_country', label: "Birth country", sortable: true},      
+      { key: 'current_team' , label: "Current team", sortable: true},
+      { key: 'reg_games_played', label: "Games", sortable: true},
+      { key: 'reg_goals', label: "Goals", sortable: true},
+      { key: 'reg_assists', label: "Assists", sortable: true},
+      { key: 'reg_points', label: "Points", sortable: true},
+      { key: 'reg_game_winning_goals', label: "Game Winning Goals", sortable: true},
+      { key: 'reg_ot_goals', label: "OT Goals", sortable: true},
+      { key: 'reg_shooting_pctg', label: "Shooting %", sortable: true},
+      { key: 'reg_plus_minus', label: "+/-", sortable: true},
+      { key: 'reg_time_on_ice' , label: "TOI", sortable: true},
+      { key: 'play_games_played', label: "Games", sortable: true},
+      { key: 'play_goals', label: "Goals", sortable: true},
+      { key: 'play_assists', label: "Assists", sortable: true},
+      { key: 'play_points', label: "Points", sortable: true},
+      { key: 'play_game_winning_goals', label: "Game Winning Goals", sortable: true},
+      { key: 'play_ot_goals', label: "OT", sortable: true},
+      { key: 'play_shooting_pctg', label: "Shooting %", sortable: true},
+      { key: 'play_plus_minus', label: "+/-", sortable: true},
+      { key: 'play_time_on_ice' , label: "TOI", sortable: true}
+  ]   
+
+
     const skaterCards = cards.filter((card)=>card.position!=='G');
+    // const sortedSkaterCards = skaterCards.sort((a, b) => a.first_name.localeCompare(b.first_name));
     const goalieCards = cards.filter((card)=>card.position==='G');
 
+    function handleColumnSort(col: string) {
+      console.log(col);
+    }
+
     return (
+        <>
+        <table>
+          <thead>
+              <tr>
+                <td className='empty'></td>
+                <td className='empty'></td>
+                <td className='empty'></td>
+                <td className='empty'></td>
+                <td className='empty'></td>
+                <td className='empty'></td>
+                <td className='regular' colSpan={9}>REGULAR SEASON</td>
+                <td className='playoffs' colSpan={9}>PLAYOFFS</td>                
+              </tr>
+            </thead>
+          <thead>              
+            <tr>
+              {skaterColumns.map((col) =>
+                <td onClick={()=>handleColumnSort(col.key)}>                        
+                  {col.label}
+                </td>
+              )}
+            </tr>              
+          </thead>          
+          <tbody>
+              {skaterCards.map((card) =>                                
+                <tr>
+                  {skaterColumns.map((col) =>
+                      <td>                        
+                        {card[col.key]}
+                      </td>
+                  )}
+                </tr>            
+              )}
+          </tbody>          
+        </table>
         
-        <div className="players-container">
+        <div className="players-container" style={{display: 'none'}}>
         {/* SKATER TABLE */}
           <h2>SKATERS</h2>
           <table>
@@ -164,6 +237,7 @@ export default function CardsTable({cards} : CardsTableProps) {
             </table>
         
         </div>
-                
+
+        </>  
     )
 }
