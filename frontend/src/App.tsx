@@ -9,6 +9,7 @@ import { fetchCards } from './api/fetchData';
 function App() {
 
   const [cards, setCards] = useState<CardDetails[]>([]);
+  const [isAddCardsOpen, setAddCardsOpen] = useState(false);
 
   const loadCards = async () => {  
     try {      
@@ -30,8 +31,15 @@ function App() {
           <img src={heroImg} alt="Hero" />
           <h1>SLAPSHOT STASH</h1>     
         </div>
+        <div className="add-player-container">
+          <button onClick={() => setAddCardsOpen(true)}>Add Player</button>
+        </div>
         <CardsTable cards={cards}></CardsTable>           
-        <PlayerSearch onCardCreated={loadCards}></PlayerSearch>
+        <PlayerSearch 
+          onCardCreated={loadCards}
+          isOpen={isAddCardsOpen}
+          onClose={()=> setAddCardsOpen(false)}
+        ></PlayerSearch>        
       </main>
     </>
   )

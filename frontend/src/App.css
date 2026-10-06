@@ -2,7 +2,7 @@ main {
   display: flex;
   flex-direction: column;
   gap: 16px;
-  margin: 24px 0;
+  margin: 24px 0;  
 }
 .hero {
   display: flex;
@@ -53,11 +53,7 @@ table th.empty {
 /* SEARCH */
 .search-container {
   display: flex;
-  align-items: center;
-  max-width: 75%;
-  margin: 0 auto;
-  width: 100%;
-  margin: 0 auto;
+  align-items: center;  
   gap: 32px;
 }
 table.search {
@@ -72,4 +68,11 @@ form {
   flex-direction: column;
   gap: 8px;
   text-align: start;
+}
+
+/* ADD PLAYER */
+.add-player-container {
+  display: flex;
+  justify-content: start;
+  padding-left: 200px;
 }

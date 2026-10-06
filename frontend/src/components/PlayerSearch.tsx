@@ -1,15 +1,19 @@
-import { useState } from "react";
+import { useState, useRef, useEffect } from "react";
 import type { Player } from "../api/types";
 import { fetchPlayers, addPlayerToCache, addCardToTable } from "../api/fetchData";
+import { createPortal } from "react-dom";
 
 interface PlayerSearchProps {
     onCardCreated: () => void;
+    onClose: () => void;
+    isOpen: boolean;
 }
 
-export default function PlayerSearch( { onCardCreated }: PlayerSearchProps ) {
+export default function PlayerSearch( { onCardCreated, onClose, isOpen }: PlayerSearchProps ) {
     const [firstName, setFirstName] = useState('');
     const [lastName, setLastName] = useState('');
     const [playerList, setPlayerList] = useState<Player[]>([]);    
+    const dialogRef = useRef<HTMLDialogElement>(null);
         
     // FORM SUBMIT TO DISPLAY PLAYERS
     async function handleSubmit(event: any) {
@@ -23,12 +27,29 @@ export default function PlayerSearch( { onCardCreated }: PlayerSearchProps ) {
         await addPlayerToCache(player);        
         await addCardToTable(player);
         onCardCreated();           
+        setFirstName('');
+        setLastName('');
+        setPlayerList([]);
+        onClose();
     }
+
+    useEffect(() => {
+        const dialog = dialogRef.current;
+        if (!dialog) return;
+
+        if (isOpen) {
+            dialog.showModal();            
+        } else {
+            dialog.close();
+        }
+    }, [isOpen]);
+
+
     
-    return (
-        <div className="search-container">
-        
-                <h2>Player Search</h2>            
+    return createPortal(
+        <dialog ref={dialogRef}>
+            <div className="search-container">                    
+                <h2>Player Search</h2>    
                 {/* FORM */}
                 <form onSubmit={handleSubmit}>        
                 <label>First Name</label>
@@ -73,9 +94,11 @@ export default function PlayerSearch( { onCardCreated }: PlayerSearchProps ) {
                         </tbody>
                     }                     
                 </table>
+                <button onClick={onClose} className="close-btn">Cancel</button>
+            </div>
 
-            </div>        
-        
+            </dialog>, 
+            document.body   
     )
 } 
 

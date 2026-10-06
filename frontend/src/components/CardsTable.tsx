@@ -1,4 +1,3 @@
-import { useState } from 'react';
 import type { CardDetails } from '../api/types'
 import StatsTable from './StatsTable';
 
@@ -12,42 +11,9 @@ interface ColumnConfig<T> {
 }
 
 export default function CardsTable({cards} : CardsTableProps) {
-
-    // TODO: PASS SORT TO COMPONENT
-  
-    const [skaterSort, setSkaterSort] = useState<keyof CardDetails>('first_name');
-    const [skaterSortOrder, setSkaterSortOrder] = useState<'asc' | 'desc'>('asc');    
-
+    
     const skaterCards = cards.filter((card)=>card.position!=='G');    
-    const sortedSkaterCards = [...skaterCards].sort((a, b) => {
-      // const valA = a[skaterSort] || '';
-      // const valB = b[skaterSort] || '';
-      const valA = a[skaterSort];
-      const valB = b[skaterSort];
-      if (valA == null) return 1;
-      if (valB == null) return -1;
-      if (typeof valA === 'number' && typeof valB === 'number') {
-        return skaterSortOrder === 'asc' ?  valA - valB : valB - valA;
-      }
-      return skaterSortOrder === 'asc' ? String(valA).localeCompare(String(valB)) : String(valB).localeCompare(String(valA));
-    });
-
-    const getSkaterSortSymbol = (key: keyof CardDetails) => {      
-      if (key !== skaterSort) {
-        return;
-      }
-      return skaterSortOrder === 'asc' ? '▲' : '▼';
-    }
-
-    function handleSkaterColumnSort(col: string) {
-      console.log(col);
-      setSkaterSort(col as keyof CardDetails);
-      if (col === skaterSort) {
-        setSkaterSortOrder((prev) => (prev === 'asc' ? 'desc' : 'asc'));
-      } else {
-        setSkaterSortOrder('asc');
-      }
-    }
+    const goalieCards = cards.filter((card)=>card.position==='G');    
 
     const skaterColumns: ColumnConfig<CardDetails>[] = [        
       { key: 'first_name', label: "First name", sortable: true},
@@ -76,33 +42,6 @@ export default function CardsTable({cards} : CardsTableProps) {
       { key: 'play_time_on_ice' , label: "TOI", sortable: true}
   ]   
 
-    // GOALIE
-
-    const [goalieSort, setGoalieSort] = useState<keyof CardDetails>('first_name');
-    const [goalieSortOrder, setGoalieSortOrder] = useState<'asc' | 'desc'>('asc');
-
-    const goalieCards = cards.filter((card)=>card.position==='G');
-
-    const sortedGoalieCards = [...goalieCards].sort((a, b) => {
-      // const valA = a[skaterSort] || '';
-      // const valB = b[skaterSort] || '';
-      const valA = a[goalieSort];
-      const valB = b[goalieSort];
-      if (valA == null) return 1;
-      if (valB == null) return -1;
-      if (typeof valA === 'number' && typeof valB === 'number') {
-        return goalieSortOrder === 'asc' ?  valA - valB : valB - valA;
-      }
-      return goalieSortOrder === 'asc' ? String(valA).localeCompare(String(valB)) : String(valB).localeCompare(String(valA));
-    });
-
-    const getGoalieSortSymbol = (key: keyof CardDetails) => {      
-      if (key !== goalieSort) {
-        return;
-      }
-      return goalieSortOrder === 'asc' ? '▲' : '▼';
-    }
-
     const goalieColumns: ColumnConfig<CardDetails>[] = [        
       { key: 'first_name', label: "First name", sortable: true},
       { key: 'last_name', label: "Last name", sortable: true},
@@ -124,103 +63,10 @@ export default function CardsTable({cards} : CardsTableProps) {
       { key: 'play_shots_against', label: "Shots Agaisnt", sortable: true},      
   ]   
 
-    
-
-    function handleGoalieColumnSort(col: string) {
-      console.log(col);
-      setGoalieSort(col as keyof CardDetails);
-      if (col === goalieSort) {
-        setGoalieSortOrder((prev) => (prev === 'asc' ? 'desc' : 'asc'));
-      } else {
-        setGoalieSortOrder('asc');
-      }
-    }
-    
-
     return (
         <>
-
-
-        <StatsTable columns={skaterColumns} cards={sortedSkaterCards} />
-        <StatsTable columns={goalieColumns} cards={sortedGoalieCards} />
-
-
-
-        {/* SKATERS */}
-        <table style={{display: 'none'}}>
-          <thead>
-              <tr>
-                <th className='empty'></th>
-                <th className='empty'></th>
-                <th className='empty'></th>
-                <th className='empty'></th>
-                <th className='empty'></th>
-                <th className='empty'></th>
-                <th className='regular' colSpan={9}>REGULAR SEASON</th>
-                <th className='playoffs' colSpan={9}>PLAYOFFS</th>                
-              </tr>
-            </thead>
-          <thead>              
-            <tr>
-              {skaterColumns.map((col) =>
-                <th onClick={()=>handleSkaterColumnSort(col.key)}>                        
-                  {col.label}                                                
-                  {getSkaterSortSymbol(col.key)}
-                </th>
-              )}
-            </tr>              
-          </thead>          
-          <tbody>
-              {sortedSkaterCards.map((card) =>                                
-                <tr>
-                  {skaterColumns.map((col) =>
-                      <td>                        
-                        {card[col.key]}
-                      </td>
-                  )}
-                </tr>            
-              )}
-          </tbody>          
-        </table>
-
-        {/* GOALIES */}
-        <table style={{display: 'none'}}>
-          <thead>
-              <tr>
-                <th className='empty'></th>
-                <th className='empty'></th>
-                <th className='empty'></th>
-                <th className='empty'></th>
-                <th className='empty'></th>
-                <th className='empty'></th>
-                <th className='regular' colSpan={6}>REGULAR SEASON</th>
-                <th className='playoffs' colSpan={6}>PLAYOFFS</th>                
-              </tr>
-            </thead>
-          <thead>              
-            <tr>
-              {goalieColumns.map((col) =>
-                <th onClick={()=>handleGoalieColumnSort(col.key)}>                        
-                  {col.label}                                                
-                  {getGoalieSortSymbol(col.key)}
-                </th>
-              )}
-            </tr>              
-          </thead>          
-          <tbody>
-              {sortedGoalieCards.map((card) =>                                
-                <tr>
-                  {goalieColumns.map((col) =>
-                      <td>                        
-                        {card[col.key]}
-                      </td>
-                  )}
-                </tr>            
-              )}
-          </tbody>          
-        </table>
-        
-        
+          <StatsTable columns={skaterColumns} cards={skaterCards} />
+          <StatsTable columns={goalieColumns} cards={goalieCards} />        
         </>  
     )
 }
