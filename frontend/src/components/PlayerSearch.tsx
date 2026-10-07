@@ -2,6 +2,7 @@ import { useState, useRef, useEffect } from "react";
 import type { Player } from "../api/types";
 import { fetchPlayers, addPlayerToCache, addCardToTable } from "../api/fetchData";
 import { createPortal } from "react-dom";
+import toast from 'react-hot-toast';
 
 interface PlayerSearchProps {
     onCardCreated: () => void;
@@ -31,6 +32,7 @@ export default function PlayerSearch( { onCardCreated, onClose, isOpen }: Player
         setLastName('');
         setPlayerList([]);
         onClose();
+        toast.success('Player added!');
     }
 
     useEffect(() => {

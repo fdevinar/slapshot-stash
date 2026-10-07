@@ -25,27 +25,37 @@ h2 {
   margin: 12px 0;
 }
 table {
-  background-color: lightgrey;  
+  /* background-color: lightgrey;   */
+  background-color: var(--ice-sheet-card);
   margin: 0 auto;
   border-radius: 6px;
   padding: 6px;
 }
 table td, table th {
-  font-size: 11px;  
+  font-size: 13px;  
   padding: 2px;
-  border: 0.3px solid black;  
+  border: 0.3px solid var(--rink-line-border); 
+  color: var(--text-primary); 
   /* max-width: 52px;   */
 }
-table thead td {
+/* table thead td {
   font-weight: 700;
-  font-size: 12px;
+  font-size: 18px;
+} */
+table tbody tr:nth-child(odd) td {
+  color: var(--text-muted);  
+  background-color: var(--ice-row-zebra);
 }
-table th.regular {
-  background-color: lightblue;
+table th.phase {
+  color: var(--ice-sheet-card);
+  &.regular {
+    background-color: var(--goalie-crease-blue);
+  }
+  &.playoffs {
+    background-color: var(--goal-lamp-red);
+  }
 }
-table th.playoffs {
-  background-color: lightcoral;
-}
+
 table th.empty {
   border: none;  
 }

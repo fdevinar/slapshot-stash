@@ -1,11 +1,7 @@
 import { useState } from 'react';
 import type { CardDetails } from '../api/types'
+import type { ColumnConfig } from './types';
 
-interface ColumnConfig<T> {
-  key: keyof T;
-  label: string;
-  sortable: boolean;
-}
 interface StatsTableProps {
   columns: ColumnConfig<CardDetails>[];
   cards: CardDetails[];
@@ -57,8 +53,8 @@ export default function StatsTable( {columns, cards}: StatsTableProps ) {
                 <th className='empty'></th>
                 <th className='empty'></th>
                 <th className='empty'></th>
-                <th className='regular' colSpan={9}>REGULAR SEASON</th>
-                <th className='playoffs' colSpan={9}>PLAYOFFS</th>                
+                <th className='phase regular' colSpan={9}>REGULAR SEASON</th>
+                <th className='phase playoffs' colSpan={9}>PLAYOFFS</th>                
               </tr>
             </thead>
           <thead>              

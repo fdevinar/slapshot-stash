@@ -1,13 +1,9 @@
 import type { CardDetails } from '../api/types'
+import type { ColumnConfig } from './types';
 import StatsTable from './StatsTable';
 
 interface CardsTableProps {
   cards: CardDetails[];
-}
-interface ColumnConfig<T> {
-  key: keyof T;
-  label: string;
-  sortable: boolean;
 }
 
 export default function CardsTable({cards} : CardsTableProps) {
@@ -15,7 +11,7 @@ export default function CardsTable({cards} : CardsTableProps) {
     const skaterCards = cards.filter((card)=>card.position!=='G');    
     const goalieCards = cards.filter((card)=>card.position==='G');    
 
-    const skaterColumns: ColumnConfig<CardDetails>[] = [        
+    const skaterColumns: ColumnConfig<CardDetails>[] = [
       { key: 'first_name', label: "First name", sortable: true},
       { key: 'last_name', label: "Last name", sortable: true},
       { key: 'position', label: "Position", sortable: true},
@@ -66,7 +62,7 @@ export default function CardsTable({cards} : CardsTableProps) {
     return (
         <>
           <StatsTable columns={skaterColumns} cards={skaterCards} />
-          <StatsTable columns={goalieColumns} cards={goalieCards} />        
+          <StatsTable columns={goalieColumns} cards={goalieCards} />
         </>  
     )
 }
