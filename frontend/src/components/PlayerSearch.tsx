@@ -1,5 +1,5 @@
 import { useState, useRef, useEffect } from "react";
-import type { Player } from "../api/types";
+import type { Player, CardSet } from "../api/types";
 import { fetchPlayers, addPlayerToCache, addCardToTable } from "../api/fetchData";
 import { createPortal } from "react-dom";
 import toast from 'react-hot-toast';
@@ -8,9 +8,10 @@ interface PlayerSearchProps {
     onCardCreated: () => void;
     onClose: () => void;
     isOpen: boolean;
+    sets: CardSet[];
 }
 
-export default function PlayerSearch( { onCardCreated, onClose, isOpen }: PlayerSearchProps ) {
+export default function PlayerSearch( { onCardCreated, onClose, isOpen, sets }: PlayerSearchProps ) {
     const [firstName, setFirstName] = useState('');
     const [lastName, setLastName] = useState('');
     const [playerList, setPlayerList] = useState<Player[]>([]);    
@@ -96,7 +97,20 @@ export default function PlayerSearch( { onCardCreated, onClose, isOpen }: Player
                         </tbody>
                     }                     
                 </table>
+                
+                {/* TODO: MAKE IT RADIO */}
+                <div className="set-list">
+                    <h3>Pick Set</h3>
+                    {sets && sets.map((set) => (
+                        <tr key={set.id}>
+                                    <td> {set.name} </td>                                    
+                                </tr>
+                            )
+                        )} 
+                </div>
+
                 <button onClick={onClose} className="close-btn">Cancel</button>
+
             </div>
 
             </dialog>, 

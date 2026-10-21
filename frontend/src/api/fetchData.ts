@@ -20,6 +20,15 @@ export async function fetchPlayers(firstName: string, lastName: string) {
         }    
     }
 
+export async function fetchSets() {
+        const response = await fetch(`http://localhost:3000/sets`);
+        const data = await response.json();
+        if (data) {                                    
+            return data;                       
+        }    
+    }    
+
+
 export async function addPlayerToCache(player: Player) {     
         const requestOptions = {
             method: 'POST',

@@ -3,14 +3,15 @@ import heroImg from './assets/hockey-stick.svg';
 import './App.css'
 import CardsTable from './components/CardsTable'
 import PlayerSearch from './components/PlayerSearch';
-import type { CardDetails } from './api/types';
-import { fetchCards } from './api/fetchData';
+import type { CardDetails, CardSet } from './api/types';
+import { fetchCards, fetchSets } from './api/fetchData';
 import toast, { Toaster } from 'react-hot-toast';
 
 function App() {
 
   const [cards, setCards] = useState<CardDetails[]>([]);
-  const [isAddCardsOpen, setAddCardsOpen] = useState(false);  
+  const [sets, setSets] = useState<CardSet[]>([]);
+  const [isAddCardsOpen, setAddCardsOpen] = useState(false);
 
   const loadCards = async () => {  
     try {      
@@ -21,9 +22,20 @@ function App() {
       console.error("Failed to load cards:", error);
     }    
   };
+
+  const loadSets = async () => {  
+    try {      
+      const data = await fetchSets();           
+      setSets(data);      
+      toast.success('Sets loaded!');
+    } catch (error) {
+      console.error("Failed to load sets:", error);
+    }    
+  };
   
   useEffect(() => {
     loadCards();    
+    loadSets();    
   }, []);
   
   return (
@@ -42,6 +54,7 @@ function App() {
           onCardCreated={loadCards}
           isOpen={isAddCardsOpen}
           onClose={()=> setAddCardsOpen(false)}
+          sets={sets}
         ></PlayerSearch>        
       </main>
     </>

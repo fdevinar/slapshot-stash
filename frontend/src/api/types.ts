@@ -57,3 +57,8 @@ export interface Player {
         positionCode: string,
         sweaterNumber: number
     }
+
+export interface CardSet {
+        id: number,
+        name: string
+}
