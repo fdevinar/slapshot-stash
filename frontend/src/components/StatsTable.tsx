@@ -32,8 +32,7 @@ export default function StatsTable( {columns, cards}: StatsTableProps ) {
           return playerSortOrder === 'asc' ? '▲' : '▼';
         }
     
-        function handlePlayerColumnSort(col: string) {
-          console.log(col);
+        function handlePlayerColumnSort(col: string) {          
           setPlayerSort(col as keyof CardDetails);
           if (col === playerSort) {
             setPlayerSortOrder((prev) => (prev === 'asc' ? 'desc' : 'asc'));
@@ -60,18 +59,18 @@ export default function StatsTable( {columns, cards}: StatsTableProps ) {
           <thead>              
             <tr>
               {columns.map((col) =>
-                <th onClick={()=>handlePlayerColumnSort(col.key)}>                        
+                <th key={col.key} onClick={()=>handlePlayerColumnSort(col.key)}>                        
                   {col.label}                                                
                   {getPlayerSortSymbol(col.key)}
                 </th>                
               )}
-            </tr>              
+            </tr>
           </thead>          
           <tbody>
               {sortedPlayerCards.map((card) =>                                
-                <tr>
+                <tr key={card.card_id}>
                   {columns.map((col) =>
-                      <td>                        
+                      <td key={col.key}>                      
                         {card[col.key]}
                       </td>
                   )}

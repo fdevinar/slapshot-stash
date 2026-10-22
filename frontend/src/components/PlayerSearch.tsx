@@ -15,14 +15,17 @@ export default function PlayerSearch( { onCardCreated, onClose, isOpen, sets }: 
     const [firstName, setFirstName] = useState('');
     const [lastName, setLastName] = useState('');
     const [playerList, setPlayerList] = useState<Player[]>([]);    
-    const dialogRef = useRef<HTMLDialogElement>(null);
-        
+    const dialogRef = useRef<HTMLDialogElement>(null);    
+    const [selectedSetId, setSelectedSetId] = useState<string>(sets.length > 0 ? String(sets[0].id) : '');
+            
     // FORM SUBMIT TO DISPLAY PLAYERS
     async function handleSubmit(event: any) {
             event.preventDefault();            
             const playerListData = await fetchPlayers(firstName, lastName);
             setPlayerList(playerListData);            
     }            
+
+    // TODO: ADD SET TO CARDS TABLE
 
     // ON PLAYER SELECTION
     async function playerSelected(player: Player) {                
@@ -87,7 +90,7 @@ export default function PlayerSearch( { onCardCreated, onClose, isOpen, sets }: 
                         <tbody>
                             {playerList.map((player) => (
                                 <tr key={player.id} onClick={() => playerSelected(player)}>
-                                    <td> {player.fullName} </td>                            
+                                    <td>{ player.fullName }</td>                            
                                     <td>{ player.currentTeamId }</td>                
                                     <td>{ player.positionCode }</td>
                                     <td>{ player.sweaterNumber }</td>
@@ -102,11 +105,19 @@ export default function PlayerSearch( { onCardCreated, onClose, isOpen, sets }: 
                 <div className="set-list">
                     <h3>Pick Set</h3>
                     {sets && sets.map((set) => (
-                        <tr key={set.id}>
-                                    <td> {set.name} </td>                                    
-                                </tr>
-                            )
-                        )} 
+                        <ul key={set.id}>                                    
+                            <li>
+                                <label htmlFor="set">{set.name}</label>
+                                <input 
+                                    type="radio"                                            
+                                    name="set"
+                                    value={set.id}
+                                    checked={selectedSetId === String(set.id)}                                    
+                                    onChange={(e) => setSelectedSetId(e.target.value)}
+                                />
+                            </li>                                
+                        </ul>
+                    ))} 
                 </div>
 
                 <button onClick={onClose} className="close-btn">Cancel</button>

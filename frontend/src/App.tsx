@@ -50,12 +50,14 @@ function App() {
           <button className="btn-hockey btn-ice-primary" onClick={() => setAddCardsOpen(true)}>Add Player</button>
         </div>
         <CardsTable cards={cards}></CardsTable>           
-        <PlayerSearch 
-          onCardCreated={loadCards}
-          isOpen={isAddCardsOpen}
-          onClose={()=> setAddCardsOpen(false)}
-          sets={sets}
-        ></PlayerSearch>        
+        { sets.length &&
+          <PlayerSearch
+            onCardCreated={loadCards}
+            isOpen={isAddCardsOpen}
+            onClose={()=> setAddCardsOpen(false)}
+            sets={sets}
+          ></PlayerSearch>          
+        }
       </main>
     </>
   )
