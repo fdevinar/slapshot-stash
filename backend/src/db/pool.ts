@@ -1,6 +1,6 @@
 import { Pool } from "pg";
 import { config } from '../config.js'
-import { readFile } from "node:fs/promises";
+//import { readFile } from "node:fs/promises";
 
 const pool = new Pool( {connectionString: config.databaseUrl} );
 

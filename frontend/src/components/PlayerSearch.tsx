@@ -25,12 +25,10 @@ export default function PlayerSearch( { onCardCreated, onClose, isOpen, sets }: 
             setPlayerList(playerListData);            
     }            
 
-    // TODO: ADD SET TO CARDS TABLE
-
     // ON PLAYER SELECTION
     async function playerSelected(player: Player) {                
         await addPlayerToCache(player);        
-        await addCardToTable(player);
+        await addCardToTable(player, selectedSetId);
         onCardCreated();           
         setFirstName('');
         setLastName('');

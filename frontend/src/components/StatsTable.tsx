@@ -65,7 +65,10 @@ export default function StatsTable( {columns, cards}: StatsTableProps ) {
                 </th>                
               )}
             </tr>
-          </thead>          
+          </thead>
+
+          {/* TODO: CONVERT TOI TO STRING ON DISPLAY ONLY */}
+
           <tbody>
               {sortedPlayerCards.map((card) =>                                
                 <tr key={card.card_id}>

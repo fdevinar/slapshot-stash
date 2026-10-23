@@ -39,11 +39,12 @@ export async function addPlayerToCache(player: Player) {
         console.log(data);
         // return data;
     }
-export async function addCardToTable(player: Player) {        
-    // TODO - TEMPORARY CONST
-    // const setId = 1;
+export async function addCardToTable(player: Player, setId: string) {            
+    
+    const convertedSetId = Number(setId);
+
     const reqBody = {
-        setId: 1,
+        setId: convertedSetId,
         playerId: player.id
     }
     const requestOptions = {

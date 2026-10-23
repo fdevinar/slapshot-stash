@@ -3,10 +3,10 @@ import type { ColumnConfig } from './types';
 import StatsTable from './StatsTable';
 
 interface CardsTableProps {
-  cards: CardDetails[];
+  cards: CardDetails[];  
 }
 
-export default function CardsTable({cards} : CardsTableProps) {
+export default function CardsTable({cards } : CardsTableProps) {
     
     const skaterCards = cards.filter((card)=>card.position!=='G');    
     const goalieCards = cards.filter((card)=>card.position==='G');    
@@ -35,7 +35,8 @@ export default function CardsTable({cards} : CardsTableProps) {
       { key: 'play_ot_goals', label: "OT Goals", sortable: true},
       { key: 'play_shooting_pctg', label: "Shooting %", sortable: true},
       { key: 'play_plus_minus', label: "+/-", sortable: true},
-      { key: 'play_time_on_ice' , label: "TOI", sortable: true}
+      { key: 'play_time_on_ice' , label: "TOI", sortable: true},
+      { key: 'set_name' , label: "Set", sortable: true}
   ]   
 
     const goalieColumns: ColumnConfig<CardDetails>[] = [        
@@ -57,6 +58,7 @@ export default function CardsTable({cards} : CardsTableProps) {
       { key: 'play_goals_against', label: "Goals Against", sortable: true},
       { key: 'play_goals_against_avg', label: "Goals Against Avg", sortable: true},
       { key: 'play_shots_against', label: "Shots Agaisnt", sortable: true},      
+      { key: 'set_name' , label: "Set", sortable: true}
   ]   
 
     return (
