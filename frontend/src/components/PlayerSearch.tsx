@@ -98,8 +98,7 @@ export default function PlayerSearch( { onCardCreated, onClose, isOpen, sets }: 
                         </tbody>
                     }                     
                 </table>
-                
-                {/* TODO: MAKE IT RADIO */}
+                                
                 <div className="set-list">
                     <h3>Pick Set</h3>
                     {sets && sets.map((set) => (

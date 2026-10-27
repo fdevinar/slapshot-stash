@@ -41,6 +41,15 @@ export default function StatsTable( {columns, cards}: StatsTableProps ) {
           }
         }
 
+        function convertToi(totalSeconds: number): string {
+          const minutes = Math.floor(totalSeconds / 60);
+          const seconds = totalSeconds % 60;
+
+          const paddedSeconds = String(seconds).padStart(2, '0');
+
+          return `${minutes}:${paddedSeconds}`;
+        }
+
     return (
         <>        
         <table>
@@ -52,6 +61,7 @@ export default function StatsTable( {columns, cards}: StatsTableProps ) {
                 <th className='empty'></th>
                 <th className='empty'></th>
                 <th className='empty'></th>
+                {/* TODO: FIX PHASE DISPLAY ON GOALIES */}
                 <th className='phase regular' colSpan={9}>REGULAR SEASON</th>
                 <th className='phase playoffs' colSpan={9}>PLAYOFFS</th>                
               </tr>
@@ -66,15 +76,16 @@ export default function StatsTable( {columns, cards}: StatsTableProps ) {
               )}
             </tr>
           </thead>
-
-          {/* TODO: CONVERT TOI TO STRING ON DISPLAY ONLY */}
-
+          
           <tbody>
               {sortedPlayerCards.map((card) =>                                
                 <tr key={card.card_id}>
                   {columns.map((col) =>
-                      <td key={col.key}>                      
-                        {card[col.key]}
+                      <td key={col.key}>                                              
+                        {col.key === 'reg_time_on_ice' || col.key === 'play_time_on_ice'  ?               
+                        (card[col.key] != null ? convertToi(Number(card[col.key])) : card[col.key]) 
+                        // DEFAULT FIELD
+                        : card[col.key]}                                          
                       </td>
                   )}
                 </tr>            
@@ -84,3 +95,4 @@ export default function StatsTable( {columns, cards}: StatsTableProps ) {
         </>
     )
 }
+
