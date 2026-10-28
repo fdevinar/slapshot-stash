@@ -34,7 +34,7 @@ export async function addPlayerToCache(player: Player) {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },            
         };
-        const response = await fetch(`http://localhost:3000/players/${player.id}`,requestOptions);
+        const response = await fetch(`http://localhost:3000/players/${player.id}`,requestOptions);        
         const data = await response.json();
         console.log(data);
         // return data;
@@ -52,8 +52,13 @@ export async function addCardToTable(player: Player, setId: string) {
         headers: { 'Content-Type': 'application/json' },            
         body: JSON.stringify(reqBody)
     };
-    const response = await fetch('http://localhost:3000/cards/',requestOptions);
+    const response = await fetch('http://localhost:3000/cards/',requestOptions);    
     const data = await response.json();
+    
+    if (!response.ok) {
+        throw new Error(data.error);        
+    }
+    
     console.log(data);
     // return data;    
 }

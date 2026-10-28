@@ -57,7 +57,7 @@ export default function CardsTable({cards } : CardsTableProps) {
       { key: 'play_shutouts', label: "Shutouts", sortable: true},
       { key: 'play_goals_against', label: "Goals Against", sortable: true},
       { key: 'play_goals_against_avg', label: "Goals Against Avg", sortable: true},
-      { key: 'play_shots_against', label: "Shots Agaisnt", sortable: true},      
+      { key: 'play_shots_against', label: "Shots Against", sortable: true},      
       { key: 'set_name' , label: "Set", sortable: true}
   ]   
 

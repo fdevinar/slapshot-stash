@@ -25,16 +25,28 @@ export default function PlayerSearch( { onCardCreated, onClose, isOpen, sets }: 
             setPlayerList(playerListData);            
     }            
 
+    // TODO: ERROR HANDLING UI - REFINE
     // ON PLAYER SELECTION
-    async function playerSelected(player: Player) {                
-        await addPlayerToCache(player);        
-        await addCardToTable(player, selectedSetId);
+    async function playerSelected(player: Player) {                                
+        await addPlayerToCache(player);                            
+        try {
+            await addCardToTable(player, selectedSetId);            
+        }
+        catch(error) {
+            console.error(error);
+            toast.error('Error');
+            cleanComponent();
+            return;
+        }        
         onCardCreated();           
+        cleanComponent();
+        onClose();
+        toast.success('Player added!');
+    }
+    function cleanComponent() {
         setFirstName('');
         setLastName('');
         setPlayerList([]);
-        onClose();
-        toast.success('Player added!');
     }
 
     useEffect(() => {

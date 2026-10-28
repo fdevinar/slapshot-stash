@@ -13,42 +13,44 @@ export default function StatsTable( {columns, cards}: StatsTableProps ) {
     const [playerSortOrder, setPlayerSortOrder] = useState<'asc' | 'desc'>('asc');    
 
     const sortedPlayerCards = [...cards].sort((a, b) => {
-          // const valA = a[skaterSort] || '';
-          // const valB = b[skaterSort] || '';
-          const valA = a[playerSort];
-          const valB = b[playerSort];
-          if (valA == null) return 1;
-          if (valB == null) return -1;
-          if (typeof valA === 'number' && typeof valB === 'number') {
-            return playerSortOrder === 'asc' ?  valA - valB : valB - valA;
-          }
-          return playerSortOrder === 'asc' ? String(valA).localeCompare(String(valB)) : String(valB).localeCompare(String(valA));
-        });
-    
-        const getPlayerSortSymbol = (key: keyof CardDetails) => {      
-          if (key !== playerSort) {
-            return;
-          }
-          return playerSortOrder === 'asc' ? '▲' : '▼';
-        }
-    
-        function handlePlayerColumnSort(col: string) {          
-          setPlayerSort(col as keyof CardDetails);
-          if (col === playerSort) {
-            setPlayerSortOrder((prev) => (prev === 'asc' ? 'desc' : 'asc'));
-          } else {
-            setPlayerSortOrder('asc');
-          }
-        }
+      // const valA = a[skaterSort] || '';
+      // const valB = b[skaterSort] || '';
+      const valA = a[playerSort];
+      const valB = b[playerSort];
+      if (valA == null) return 1;
+      if (valB == null) return -1;
+      if (typeof valA === 'number' && typeof valB === 'number') {
+        return playerSortOrder === 'asc' ?  valA - valB : valB - valA;
+      }
+      return playerSortOrder === 'asc' ? String(valA).localeCompare(String(valB)) : String(valB).localeCompare(String(valA));
+    });
 
-        function convertToi(totalSeconds: number): string {
-          const minutes = Math.floor(totalSeconds / 60);
-          const seconds = totalSeconds % 60;
+    const getPlayerSortSymbol = (key: keyof CardDetails) => {      
+      if (key !== playerSort) {
+        return;
+      }
+      return playerSortOrder === 'asc' ? '▲' : '▼';
+    }
 
-          const paddedSeconds = String(seconds).padStart(2, '0');
+    function handlePlayerColumnSort(col: string) {          
+      setPlayerSort(col as keyof CardDetails);
+      if (col === playerSort) {
+        setPlayerSortOrder((prev) => (prev === 'asc' ? 'desc' : 'asc'));
+      } else {
+        setPlayerSortOrder('asc');
+      }
+    }
 
-          return `${minutes}:${paddedSeconds}`;
-        }
+    function convertToi(totalSeconds: number): string {
+      const minutes = Math.floor(totalSeconds / 60);
+      const seconds = totalSeconds % 60;
+
+      const paddedSeconds = String(seconds).padStart(2, '0');
+
+      return `${minutes}:${paddedSeconds}`;
+    }
+
+    const phaseColumns = (columns.length - 7)/2;   
 
     return (
         <>        
@@ -60,10 +62,9 @@ export default function StatsTable( {columns, cards}: StatsTableProps ) {
                 <th className='empty'></th>
                 <th className='empty'></th>
                 <th className='empty'></th>
-                <th className='empty'></th>
-                {/* TODO: FIX PHASE DISPLAY ON GOALIES */}
-                <th className='phase regular' colSpan={9}>REGULAR SEASON</th>
-                <th className='phase playoffs' colSpan={9}>PLAYOFFS</th>                
+                <th className='empty'></th>                
+                <th className='phase regular' colSpan={phaseColumns}>REGULAR SEASON</th>
+                <th className='phase playoffs' colSpan={phaseColumns}>PLAYOFFS</th>                
               </tr>
             </thead>
           <thead>              
