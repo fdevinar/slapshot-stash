@@ -25,16 +25,19 @@ export default function PlayerSearch( { onCardCreated, onClose, isOpen, sets }: 
             setPlayerList(playerListData);            
     }            
 
-    // TODO: ERROR HANDLING UI - REFINE
+    // TODO: ERROR HANDLING UI - CREATE CUSTOM ERROR CLASS TO HANDLE 409 STATUS ERROR
     // ON PLAYER SELECTION
     async function playerSelected(player: Player) {                                
         await addPlayerToCache(player);                            
         try {
             await addCardToTable(player, selectedSetId);            
         }
-        catch(error) {
-            console.error(error);
-            toast.error('Error');
+        catch(error) {         
+            //TODO: RE-DO               
+            console.log(error);
+            // if (String(error) === 'Error: 23505') {
+            //     toast.error('Error: Player already exists');
+            // }
             cleanComponent();
             return;
         }        

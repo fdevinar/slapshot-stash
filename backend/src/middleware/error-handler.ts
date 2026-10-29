@@ -8,9 +8,9 @@ function isPgError(err: unknown): err is { code: string; constraint?: string } {
 // error handler must have 4 parameters
 function errorHandler(err: Error, req: Request, res: Response, next:NextFunction): void {    
     console.error(err);
-    if (isPgError(err) && err.code === '23505') {
-        // handle here
-        console.log(err.code);
+    if (isPgError(err) && err.code === '23505') {                
+        res.status(409).json({error: err});
+        return;
     }
     res.status(500).json({error: "Oops! Something went wrong..."});
 }
