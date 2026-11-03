@@ -1,4 +1,5 @@
 import type { CardDetails, Player } from '../api/types'
+import { ApiError } from './errors';
 
 export async function fetchCards(): Promise<CardDetails[]> {
     const response = await fetch("http://localhost:3000/cards");
@@ -16,7 +17,7 @@ export async function fetchPlayers(firstName: string, lastName: string) {
         const response = await fetch(`http://localhost:3000/players/search?firstName=${firstName}&lastName=${lastName}`);
         const data = await response.json();
         if (data) {                                    
-            return data;                       
+            return data;
         }    
     }
 
@@ -24,12 +25,12 @@ export async function fetchSets() {
         const response = await fetch(`http://localhost:3000/sets`);
         const data = await response.json();
         if (data) {                                    
-            return data;                       
+            return data;
         }    
     }    
 
 
-export async function addPlayerToCache(player: Player) {     
+export async function addPlayerToCache(player: Player) {
         const requestOptions = {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },            
@@ -39,7 +40,7 @@ export async function addPlayerToCache(player: Player) {
         console.log(data);
         // return data;
     }
-export async function addCardToTable(player: Player, setId: string) {            
+export async function addCardToTable(player: Player, setId: string) {
     
     const convertedSetId = Number(setId);
 
@@ -55,8 +56,9 @@ export async function addCardToTable(player: Player, setId: string) {
     const response = await fetch('http://localhost:3000/cards/',requestOptions);    
     const data = await response.json();
     
-    if (!response.ok) {
-        throw new Error(data.error);        
+    // CUSTOM ERROR
+    if (!response.ok) {                
+        throw new ApiError(data.error, response.status);
     }
     
     console.log(data);
