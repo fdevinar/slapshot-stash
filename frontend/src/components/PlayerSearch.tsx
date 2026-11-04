@@ -4,6 +4,7 @@ import { fetchPlayers, addPlayerToCache, addCardToTable } from "../api/fetchData
 import { createPortal } from "react-dom";
 import toast from 'react-hot-toast';
 import { ApiError } from "../api/errors";
+import puck from '../assets/nhl-puck.png';
 
 interface PlayerSearchProps {
     onCardCreated: () => void;
@@ -18,17 +19,24 @@ export default function PlayerSearch( { onCardCreated, onClose, isOpen, sets }: 
     const [playerList, setPlayerList] = useState<Player[]>([]);    
     const dialogRef = useRef<HTMLDialogElement>(null);    
     const [selectedSetId, setSelectedSetId] = useState<string>(sets.length > 0 ? String(sets[0].id) : '');
+    const [loadingState, setLoadingState] = useState(false);
             
     // FORM SUBMIT TO DISPLAY PLAYERS
     async function handleSubmit(event: any) {
-            event.preventDefault();            
-            const playerListData = await fetchPlayers(firstName, lastName);
+            event.preventDefault();
+            setLoadingState(true);                 
+            const playerListData = await fetchPlayers(firstName, lastName);            
+            setLoadingState(false);       
             setPlayerList(playerListData);            
     }            
 
+    // TODO: DOUBLE CHECK THE LOADING STATE ISNT STUCK
+    // TODO: HANDLE NO-INFO PLAYER ERROR
+
     // ON PLAYER SELECTION
-    async function playerSelected(player: Player) {                                
-        await addPlayerToCache(player);                            
+    async function playerSelected(player: Player) {
+        setLoadingState(true);
+        await addPlayerToCache(player);
         try {
             await addCardToTable(player, selectedSetId);
         }
@@ -39,6 +47,7 @@ export default function PlayerSearch( { onCardCreated, onClose, isOpen, sets }: 
             cleanComponent();
             return;
         }        
+        setLoadingState(false);
         onCardCreated();           
         cleanComponent();
         onClose();
@@ -65,10 +74,10 @@ export default function PlayerSearch( { onCardCreated, onClose, isOpen, sets }: 
     
     return createPortal(
         <dialog ref={dialogRef}>
-            <div className="search-container">                    
+            <div className="search-container">
                 <h2>Player Search</h2>    
                 {/* FORM */}
-                <form onSubmit={handleSubmit}>        
+                <form onSubmit={handleSubmit}>
                 <label>First Name</label>
                 <input 
                 type="text" 
@@ -82,14 +91,16 @@ export default function PlayerSearch( { onCardCreated, onClose, isOpen, sets }: 
                 required
                 value={lastName}
                 onChange={(e)=> setLastName(e.target.value)}
-                />
-                {/* <input type="submit" /> */}
+                />                
                 <button type="submit">Search</button>
                 </form>
 
                 {/* SEARCH LIST */}
                 <table className="search">
                     <thead>
+                        {loadingState &&
+                            <tr><img id="puck" src={puck} alt="Puck" /></tr>
+                        }                        
                         <tr>
                             <td>Name</td>
                             <td>Team</td>
@@ -97,17 +108,17 @@ export default function PlayerSearch( { onCardCreated, onClose, isOpen, sets }: 
                             <td>#</td>
                         </tr>
                     </thead>
-                    {playerList &&
+                    {playerList && !loadingState &&
                         <tbody>
                             {playerList.map((player) => (
                                 <tr key={player.id} onClick={() => playerSelected(player)}>
-                                    <td>{ player.fullName }</td>                            
-                                    <td>{ player.currentTeamId }</td>                
+                                    <td>{ player.fullName }</td>
+                                    <td>{ player.currentTeamId }</td>
                                     <td>{ player.positionCode }</td>
                                     <td>{ player.sweaterNumber }</td>
                                 </tr>
                             )
-                        )}                                 
+                        )}
                         </tbody>
                     }                     
                 </table>
@@ -115,17 +126,18 @@ export default function PlayerSearch( { onCardCreated, onClose, isOpen, sets }: 
                 <div className="set-list">
                     <h3>Pick Set</h3>
                     {sets && sets.map((set) => (
-                        <ul key={set.id}>                                    
+                        <ul key={set.id}>
                             <li>
-                                <label htmlFor="set">{set.name}</label>
+                                <label htmlFor={`set-${set.id}`}>{set.name}</label>
                                 <input 
-                                    type="radio"                                            
+                                    type="radio"
                                     name="set"
+                                    id={`set-${set.id}`}
                                     value={set.id}
-                                    checked={selectedSetId === String(set.id)}                                    
+                                    checked={selectedSetId === String(set.id)}
                                     onChange={(e) => setSelectedSetId(e.target.value)}
                                 />
-                            </li>                                
+                            </li>
                         </ul>
                     ))} 
                 </div>

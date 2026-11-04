@@ -79,6 +79,25 @@ form {
   gap: 8px;
   text-align: start;
 }
+.set-list ul li {
+  display: flex;
+  flex-direction: row-reverse;
+  list-style: none;
+  justify-content: start;
+}
+
+img#puck {
+  max-width: 80px;
+  animation: spin 1s linear infinite;
+}
+@keyframes spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
 
 /* ADD PLAYER */
 .add-player-container {
