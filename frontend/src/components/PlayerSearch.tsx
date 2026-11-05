@@ -24,31 +24,53 @@ export default function PlayerSearch( { onCardCreated, onClose, isOpen, sets }: 
     // FORM SUBMIT TO DISPLAY PLAYERS
     async function handleSubmit(event: any) {
             event.preventDefault();
-            setLoadingState(true);                 
-            const playerListData = await fetchPlayers(firstName, lastName);            
-            setLoadingState(false);       
-            setPlayerList(playerListData);            
+            setLoadingState(true);
+            try {
+                const playerListData = await fetchPlayers(firstName, lastName);                            
+                setPlayerList(playerListData);            
+            }
+            catch(error) {                
+                if (String(error) === 'TypeError: Failed to fetch') {
+                    toast.error('No HTTP response from backend');
+                }                
+            }
+            finally {
+                setLoadingState(false);
+            }
     }            
 
-    // TODO: DOUBLE CHECK THE LOADING STATE ISNT STUCK
-    // TODO: HANDLE NO-INFO PLAYER ERROR
+    // TODO: HANDLE BACKEND OFFLINE ERROR MESSAGES - MAKE THEM MORE CONSISTENT INSTEAD OF CHECKING FOR ERROR STRING?
+    // TODO: HANDLE NO-INFO PLAYER ERROR -> PLAYERS THAT DIDNT PLAY ON NHL/EMPTY INFO
 
     // ON PLAYER SELECTION
     async function playerSelected(player: Player) {
         setLoadingState(true);
-        await addPlayerToCache(player);
+        try {
+            await addPlayerToCache(player);
+            }
+        catch(error) {
+            if (String(error) === 'TypeError: Failed to fetch') {
+                toast.error('No HTTP response from backend');
+            }
+        }
+        finally {
+            setLoadingState(false);
+        }
         try {
             await addCardToTable(player, selectedSetId);
         }
-        catch(error) {                                             
+        catch(error) {
             if (error instanceof ApiError && error.status === 409) {
                 toast.error('Error: Player already exists');
-            }
+            }            
             cleanComponent();
             return;
+        }
+        finally {
+            setLoadingState(false);
         }        
         setLoadingState(false);
-        onCardCreated();           
+        onCardCreated();
         cleanComponent();
         onClose();
         toast.success('Player added!');
