@@ -3,7 +3,7 @@ import type { Player, CardSet } from "../api/types";
 import { fetchPlayers, addPlayerToCache, addCardToTable } from "../api/fetchData";
 import { createPortal } from "react-dom";
 import toast from 'react-hot-toast';
-import { ApiError } from "../api/errors";
+import { ApiError, NetworkError } from "../api/errors";
 import puck from '../assets/nhl-puck.png';
 
 interface PlayerSearchProps {
@@ -21,6 +21,9 @@ export default function PlayerSearch( { onCardCreated, onClose, isOpen, sets }: 
     const [selectedSetId, setSelectedSetId] = useState<string>(sets.length > 0 ? String(sets[0].id) : '');
     const [loadingState, setLoadingState] = useState(false);
             
+    // TODO: HANDLE NO-INFO PLAYER ERROR -> PLAYERS THAT DIDNT PLAY ON NHL/EMPTY INFO
+    // TODO: MAKE SURE ALL FUNCTIONS TREAT NETWORK ERRORS THE SAME
+
     // FORM SUBMIT TO DISPLAY PLAYERS
     async function handleSubmit(event: any) {
             event.preventDefault();
@@ -29,39 +32,41 @@ export default function PlayerSearch( { onCardCreated, onClose, isOpen, sets }: 
                 const playerListData = await fetchPlayers(firstName, lastName);                            
                 setPlayerList(playerListData);            
             }
-            catch(error) {                
-                if (String(error) === 'TypeError: Failed to fetch') {
-                    toast.error('No HTTP response from backend');
-                }                
+            catch(error) {                                
+                if (error instanceof NetworkError) {
+                    toast.error(error.message);
+                }          
             }
             finally {
                 setLoadingState(false);
             }
     }            
-
-    // TODO: HANDLE BACKEND OFFLINE ERROR MESSAGES - MAKE THEM MORE CONSISTENT INSTEAD OF CHECKING FOR ERROR STRING?
-    // TODO: HANDLE NO-INFO PLAYER ERROR -> PLAYERS THAT DIDNT PLAY ON NHL/EMPTY INFO
-
+        
     // ON PLAYER SELECTION
     async function playerSelected(player: Player) {
         setLoadingState(true);
+        // ADD TO CACHE
         try {
             await addPlayerToCache(player);
             }
         catch(error) {
-            if (String(error) === 'TypeError: Failed to fetch') {
-                toast.error('No HTTP response from backend');
+            if (error instanceof NetworkError) {
+                toast.error('Network error');
             }
         }
         finally {
             setLoadingState(false);
         }
+        // ADD TO CARDS
         try {
             await addCardToTable(player, selectedSetId);
         }
         catch(error) {
             if (error instanceof ApiError && error.status === 409) {
                 toast.error('Error: Player already exists');
+            }
+            if (error instanceof NetworkError) {
+                toast.error('Network error');
             }            
             cleanComponent();
             return;
@@ -69,7 +74,7 @@ export default function PlayerSearch( { onCardCreated, onClose, isOpen, sets }: 
         finally {
             setLoadingState(false);
         }        
-        setLoadingState(false);
+        
         onCardCreated();
         cleanComponent();
         onClose();
