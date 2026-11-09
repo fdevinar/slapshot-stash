@@ -21,8 +21,8 @@ export default function PlayerSearch( { onCardCreated, onClose, isOpen, sets }: 
     const [selectedSetId, setSelectedSetId] = useState<string>(sets.length > 0 ? String(sets[0].id) : '');
     const [loadingState, setLoadingState] = useState(false);
             
-    // TODO: HANDLE NO-INFO PLAYER ERROR -> PLAYERS THAT DIDNT PLAY ON NHL/EMPTY INFO
-    // TODO: MAKE SURE ALL FUNCTIONS TREAT NETWORK ERRORS THE SAME
+    // TODO: HANDLE NO-NHL-INFO PLAYER ERROR -> PLAYERS THAT DIDNT PLAY ON NHL/EMPTY INFO
+    // TODO: DOUBLE CHECK ERROR HANDLING
 
     // FORM SUBMIT TO DISPLAY PLAYERS
     async function handleSubmit(event: any) {
@@ -50,8 +50,8 @@ export default function PlayerSearch( { onCardCreated, onClose, isOpen, sets }: 
             await addPlayerToCache(player);
             }
         catch(error) {
-            if (error instanceof NetworkError) {
-                toast.error('Network error');
+            if (error instanceof NetworkError) {                
+                toast.error(error.message);
             }
         }
         finally {
@@ -65,8 +65,8 @@ export default function PlayerSearch( { onCardCreated, onClose, isOpen, sets }: 
             if (error instanceof ApiError && error.status === 409) {
                 toast.error('Error: Player already exists');
             }
-            if (error instanceof NetworkError) {
-                toast.error('Network error');
+            if (error instanceof NetworkError) {                
+                toast.error(error.message);
             }            
             cleanComponent();
             return;
