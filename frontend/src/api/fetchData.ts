@@ -47,7 +47,10 @@ export async function addPlayerToCache(player: Player) {
     };        
     const response = await fetchHelper(`http://localhost:3000/players/${player.id}`,requestOptions);        
     const data = await response.json();            
-    console.log(data);                
+    // CUSTOM ERROR
+    if (!response.ok) {                        
+        throw new ApiError(data.error, response.status);
+    }        
 }
     
 export async function addCardToTable(player: Player, setId: string) {

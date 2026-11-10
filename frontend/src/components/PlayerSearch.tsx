@@ -35,7 +35,9 @@ export default function PlayerSearch( { onCardCreated, onClose, isOpen, sets }: 
             catch(error) {                                
                 if (error instanceof NetworkError) {
                     toast.error(error.message);
-                }          
+                } else {
+                    toast.error('Something went wrong');
+                }         
             }
             finally {
                 setLoadingState(false);
@@ -48,26 +50,35 @@ export default function PlayerSearch( { onCardCreated, onClose, isOpen, sets }: 
         // ADD TO CACHE
         try {
             await addPlayerToCache(player);
-            }
-        catch(error) {
-            if (error instanceof NetworkError) {                
+        }
+        catch(error) {            
+            if (error instanceof ApiError && error.status === 422) {
                 toast.error(error.message);
+            } else if (error instanceof NetworkError) {                
+                toast.error(error.message);
+            } else {
+                toast.error('Something went wrong');
             }
+            cleanComponent();  
+            return;          
         }
         finally {
             setLoadingState(false);
-        }
+        }        
+        setLoadingState(true);        
         // ADD TO CARDS
         try {
             await addCardToTable(player, selectedSetId);
         }
         catch(error) {
+            console.log(error);
             if (error instanceof ApiError && error.status === 409) {
-                toast.error('Error: Player already exists');
-            }
-            if (error instanceof NetworkError) {                
                 toast.error(error.message);
-            }            
+            } else if (error instanceof NetworkError) {                
+                toast.error(error.message);
+            } else {
+                toast.error('Something went wrong');
+            }        
             cleanComponent();
             return;
         }

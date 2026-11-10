@@ -46,13 +46,13 @@ router.post('/:id', async (req: Request<UserRouteParams>, res: Response) => {
         return res.status(404).json({error: 'Player not found'});        
     }   
     // DB UPSERT
-    try {
+    // try {
         const upsertedPlayer = await upsertPlayer(playerData);
         console.log(upsertedPlayer);
-    }
-    catch(error) {
-        console.log(error);
-    }
+    // }
+    // catch(error) {
+    //     console.log(error);
+    // }
     res.status(200).json(playerData); 
 
 });
