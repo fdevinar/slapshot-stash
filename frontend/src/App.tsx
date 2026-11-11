@@ -15,7 +15,7 @@ function App() {
 
   const loadCards = async () => {  
     try {      
-      const data = await fetchCards();           
+      const data = await fetchCards();
       setCards(data);      
       toast.success('Cards loaded!');
     } catch (error) {

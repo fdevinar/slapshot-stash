@@ -20,10 +20,7 @@ export default function PlayerSearch( { onCardCreated, onClose, isOpen, sets }: 
     const dialogRef = useRef<HTMLDialogElement>(null);    
     const [selectedSetId, setSelectedSetId] = useState<string>(sets.length > 0 ? String(sets[0].id) : '');
     const [loadingState, setLoadingState] = useState(false);
-            
-    // TODO: HANDLE NO-NHL-INFO PLAYER ERROR -> PLAYERS THAT DIDNT PLAY ON NHL/EMPTY INFO
-    // TODO: DOUBLE CHECK ERROR HANDLING
-
+                
     // FORM SUBMIT TO DISPLAY PLAYERS
     async function handleSubmit(event: any) {
             event.preventDefault();
@@ -148,7 +145,9 @@ export default function PlayerSearch( { onCardCreated, onClose, isOpen, sets }: 
                     </thead>
                     {playerList && !loadingState &&
                         <tbody>
-                            {playerList.map((player) => (
+                            {playerList
+                                // .filter((player) => player.sweaterNumber != null)
+                                .map((player) => (
                                 <tr key={player.id} onClick={() => playerSelected(player)}>
                                     <td>{ player.fullName }</td>
                                     <td>{ player.currentTeamId }</td>

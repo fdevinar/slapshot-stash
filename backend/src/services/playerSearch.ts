@@ -9,8 +9,7 @@ interface PlayerData {
 }
 
 // FETCH PLAYER ID FROM NHL API
-export async function fetchPlayerId(firstName: string, lastName: string): Promise<PlayerData[]> {
-        
+export async function fetchPlayerId(firstName: string, lastName: string): Promise<PlayerData[]> {        
     const reqString = buildPlayerSearchUrl(firstName, lastName);
     const playerData = await fetchData(reqString);
         
@@ -27,7 +26,7 @@ export async function fetchPlayerId(firstName: string, lastName: string): Promis
 
 // BUILD SEARCH URL
 function buildPlayerSearchUrl(firstName: string, lastName: string): string {
-    const cayenneExp = `firstName likeIgnoreCase '%${firstName}%' and lastName likeIgnoreCase '%${lastName}%'`;
+    const cayenneExp = `firstName likeIgnoreCase '%${firstName}%' and lastName likeIgnoreCase '%${lastName}%' and sweaterNumber != null`;
     const encodedExp = encodeURIComponent(cayenneExp);
     return `https://api.nhle.com/stats/rest/en/players?cayenneExp=${encodedExp}`;
 }
