@@ -13,23 +13,23 @@ function App() {
   const [sets, setSets] = useState<CardSet[]>([]);
   const [isAddCardsOpen, setAddCardsOpen] = useState(false);
 
-  const loadCards = async () => {  
+  const loadCards = async () => {
     try {      
       const data = await fetchCards();
       setCards(data);      
       toast.success('Cards loaded!');
     } catch (error) {
-      console.error("Failed to load cards:", error);
+      console.error('Failed to load cards:', error);
     }    
   };
 
   const loadSets = async () => {  
     try {      
-      const data = await fetchSets();           
+      const data = await fetchSets();
       setSets(data);      
       toast.success('Sets loaded!');
     } catch (error) {
-      console.error("Failed to load sets:", error);
+      console.error('Failed to load sets:', error);
     }    
   };
   

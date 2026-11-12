@@ -40,12 +40,12 @@ export async function fetchSets() {
     }    
 }    
    
-export async function addPlayerToCache(player: Player) {
+export async function upsertPlayerToCache(playerId: number) {
     const requestOptions = {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },            
     };        
-    const response = await fetchHelper(`http://localhost:3000/players/${player.id}`,requestOptions);        
+    const response = await fetchHelper(`http://localhost:3000/players/${playerId}`,requestOptions);        
     const data = await response.json();            
     // CUSTOM ERROR
     if (!response.ok) {                        

@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import type { CardDetails } from '../api/types'
 import type { ColumnConfig } from './types';
+import { upsertPlayerToCache } from "../api/fetchData";
 
 interface StatsTableProps {
   columns: ColumnConfig<CardDetails>[];
@@ -52,6 +53,15 @@ export default function StatsTable( {columns, cards}: StatsTableProps ) {
 
     const phaseColumns = (columns.length - 7)/2;   
 
+
+    // TODO - HANDLE ERRORS
+    // TODO - RELOAD ON UPDATE ON REFRESH
+    async function updatePlayer(playerId: number) {
+      
+      await upsertPlayerToCache(playerId); 
+      
+    }
+
     return (
         <>        
         <table>
@@ -76,11 +86,11 @@ export default function StatsTable( {columns, cards}: StatsTableProps ) {
                 </th>                
               )}
             </tr>
-          </thead>
-          
+          </thead>                    
+
           <tbody>
               {sortedPlayerCards.map((card) =>                                
-                <tr key={card.card_id}>
+                <tr key={card.card_id} onClick={()=>{updatePlayer(card.player_id)}}>
                   {columns.map((col) =>
                       <td key={col.key}>                                              
                         {col.key === 'reg_time_on_ice' || col.key === 'play_time_on_ice'  ?               

@@ -31,6 +31,12 @@ table {
   border-radius: 6px;
   padding: 6px;
 }
+table tr {
+  transition: all 333ms;
+}
+table tr:hover {
+  scale: 1.05;
+}
 table td, table th {
   font-size: 13px;  
   padding: 2px;

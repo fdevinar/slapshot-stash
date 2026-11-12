@@ -1,6 +1,6 @@
 import { useState, useRef, useEffect } from "react";
 import type { Player, CardSet } from "../api/types";
-import { fetchPlayers, addPlayerToCache, addCardToTable } from "../api/fetchData";
+import { fetchPlayers, upsertPlayerToCache, addCardToTable } from "../api/fetchData";
 import { createPortal } from "react-dom";
 import toast from 'react-hot-toast';
 import { ApiError, NetworkError } from "../api/errors";
@@ -46,7 +46,7 @@ export default function PlayerSearch( { onCardCreated, onClose, isOpen, sets }: 
         setLoadingState(true);
         // ADD TO CACHE
         try {
-            await addPlayerToCache(player);
+            await upsertPlayerToCache(player.id);            
         }
         catch(error) {            
             if (error instanceof ApiError && error.status === 422) {
@@ -59,7 +59,7 @@ export default function PlayerSearch( { onCardCreated, onClose, isOpen, sets }: 
             cleanComponent();  
             return;          
         }
-        finally {
+        finally {            
             setLoadingState(false);
         }        
         setLoadingState(true);        
