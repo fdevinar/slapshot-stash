@@ -4,9 +4,10 @@ import StatsTable from './StatsTable';
 
 interface CardsTableProps {
   cards: CardDetails[];  
+  onUpsertedPlayer: () => void;
 }
 
-export default function CardsTable({cards } : CardsTableProps) {
+export default function CardsTable({ cards, onUpsertedPlayer } : CardsTableProps) {
     
     const skaterCards = cards.filter((card)=>card.position!=='G');    
     const goalieCards = cards.filter((card)=>card.position==='G');    
@@ -67,8 +68,8 @@ export default function CardsTable({cards } : CardsTableProps) {
 
     return (
         <>
-          <StatsTable columns={skaterColumns} cards={skaterCards} />
-          <StatsTable columns={goalieColumns} cards={goalieCards} />
+          <StatsTable onUpsertedPlayer={onUpsertedPlayer} columns={skaterColumns} cards={skaterCards} />
+          <StatsTable onUpsertedPlayer={onUpsertedPlayer} columns={goalieColumns} cards={goalieCards} />
         </>  
     )
 }

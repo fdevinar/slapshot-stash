@@ -36,6 +36,7 @@ table tr {
 }
 table tr:hover {
   scale: 1.05;
+  cursor: pointer;
 }
 table td, table th {
   font-size: 13px;  

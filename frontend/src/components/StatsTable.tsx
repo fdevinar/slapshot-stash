@@ -2,13 +2,15 @@ import { useState } from 'react';
 import type { CardDetails } from '../api/types'
 import type { ColumnConfig } from './types';
 import { upsertPlayerToCache } from "../api/fetchData";
+import toast from 'react-hot-toast';
 
 interface StatsTableProps {
   columns: ColumnConfig<CardDetails>[];
   cards: CardDetails[];
+  onUpsertedPlayer: () => void;
 }
 
-export default function StatsTable( {columns, cards}: StatsTableProps ) {
+export default function StatsTable( {onUpsertedPlayer, columns, cards}: StatsTableProps ) {
 
     const [playerSort, setPlayerSort] = useState<keyof CardDetails>('first_name');
     const [playerSortOrder, setPlayerSortOrder] = useState<'asc' | 'desc'>('asc');    
@@ -55,11 +57,17 @@ export default function StatsTable( {columns, cards}: StatsTableProps ) {
 
 
     // TODO - HANDLE ERRORS
-    // TODO - RELOAD ON UPDATE ON REFRESH
+    
     async function updatePlayer(playerId: number) {
       
-      await upsertPlayerToCache(playerId); 
-      
+      try {
+        await upsertPlayerToCache(playerId);
+        onUpsertedPlayer();
+        toast.success('Player data updated');      
+      }
+      catch {
+        toast.error('Unknown error');
+      }
     }
 
     return (
@@ -90,7 +98,7 @@ export default function StatsTable( {columns, cards}: StatsTableProps ) {
 
           <tbody>
               {sortedPlayerCards.map((card) =>                                
-                <tr key={card.card_id} onClick={()=>{updatePlayer(card.player_id)}}>
+                <tr title='Click to refresh data' key={card.card_id} onClick={()=>{updatePlayer(card.player_id)}}>
                   {columns.map((col) =>
                       <td key={col.key}>                                              
                         {col.key === 'reg_time_on_ice' || col.key === 'play_time_on_ice'  ?               

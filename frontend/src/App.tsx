@@ -49,7 +49,10 @@ function App() {
         <div className="add-player-container">
           <button className="btn-hockey btn-ice-primary" onClick={() => setAddCardsOpen(true)}>Add Player</button>
         </div>
-        <CardsTable cards={cards}></CardsTable>           
+        <CardsTable
+          cards={cards}
+          onUpsertedPlayer={loadCards}    
+        ></CardsTable>           
         { sets.length &&
           <PlayerSearch
             onCardCreated={loadCards}
