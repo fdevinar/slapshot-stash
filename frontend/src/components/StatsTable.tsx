@@ -53,10 +53,7 @@ export default function StatsTable( {onUpsertedPlayer, columns, cards}: StatsTab
       return `${minutes}:${paddedSeconds}`;
     }
 
-    const phaseColumns = (columns.length - 7)/2;   
-
-
-    // TODO - HANDLE ERRORS
+    const phaseColumns = (columns.length - 7)/2;
     
     async function updatePlayer(playerId: number) {
       
@@ -100,11 +97,14 @@ export default function StatsTable( {onUpsertedPlayer, columns, cards}: StatsTab
               {sortedPlayerCards.map((card) =>                                
                 <tr title='Click to refresh data' key={card.card_id} onClick={()=>{updatePlayer(card.player_id)}}>
                   {columns.map((col) =>
-                      <td key={col.key}>                                              
-                        {col.key === 'reg_time_on_ice' || col.key === 'play_time_on_ice'  ?               
-                        (card[col.key] != null ? convertToi(Number(card[col.key])) : card[col.key]) 
-                        // DEFAULT FIELD
-                        : card[col.key]}                                          
+                      <td key={col.key}>
+                        {/* WRAP IN SPAN TO ANIMATE ON CHANGE */}
+                        <span key={String(card[col.key])}>                          
+                          {col.key === 'reg_time_on_ice' || col.key === 'play_time_on_ice'  ?               
+                          (card[col.key] != null ? convertToi(Number(card[col.key])) : card[col.key]) 
+                          // DEFAULT FIELD
+                          : card[col.key]}                                          
+                        </span>
                       </td>
                   )}
                 </tr>            

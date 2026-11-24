@@ -34,7 +34,7 @@ table {
 table tr {
   transition: all 333ms;
 }
-table tr:hover {
+table tbody tr:hover {
   scale: 1.05;
   cursor: pointer;
 }
@@ -42,13 +42,24 @@ table td, table th {
   font-size: 13px;  
   padding: 2px;
   border: 0.3px solid var(--rink-line-border); 
-  color: var(--text-primary); 
-  /* max-width: 52px;   */
+  color: var(--text-primary);   
 }
-/* table thead td {
-  font-weight: 700;
-  font-size: 18px;
-} */
+ /* ANIMATE ON CELL VALUE CHANGE */
+ table tbody tr td span {
+  display: inline-block;
+  animation: cellUpdate 0.6s ease-out;
+}
+@keyframes cellUpdate {
+  0% {
+    background-color: #f5f5f5;
+    transform: scale(1.2);
+  }
+  100% {
+    background-color: transparent;
+    transform: scale(1);
+  }
+}
+
 table tbody tr:nth-child(odd) td {
   color: var(--text-muted);  
   background-color: var(--ice-row-zebra);
