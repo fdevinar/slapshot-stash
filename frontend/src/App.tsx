@@ -37,6 +37,13 @@ function App() {
     loadCards();    
     loadSets();    
   }, []);
+
+  function deleteAllCards() {
+    if (confirm('Are you sure you want to delete all cards?')) {      
+      // call backend here
+    }
+    
+  }
   
   return (
     <>
@@ -46,8 +53,13 @@ function App() {
           <img src={heroImg} alt="Hero" />
           <h1 onClick={()=>{toast(<b>SLAPSHOT STASH</b>,{icon:"🏒"});}}>SLAPSHOT STASH</h1>     
         </div>
-        <div className="add-player-container">
-          <button className="btn-hockey btn-ice-primary" onClick={() => setAddCardsOpen(true)}>Add Player</button>
+        <div className="options-container">
+          <div className="add-player-container">
+            <button className="btn-hockey btn-ice-primary" onClick={() => setAddCardsOpen(true)}>➕ Add Card</button>
+          </div>
+          <div className="delete-players-container">
+            <button className="btn-hockey btn-ice-primary" onClick={() => deleteAllCards()}>❌ Delete all Cards</button>
+          </div>
         </div>
         <CardsTable
           cards={cards}

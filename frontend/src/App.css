@@ -118,8 +118,9 @@ img#puck {
 }
 
 /* ADD PLAYER */
-.add-player-container {
+.options-container {
   display: flex;
-  justify-content: start;
+  justify-content: space-between;
+  width: 75%;
   padding-left: 200px;
 }
