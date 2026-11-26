@@ -5,6 +5,7 @@ import errorHandler from './middleware/error-handler.js';
 import setsRouter from './routes/sets.js';
 import playersRouter from './routes/players.js';
 import cardsRouter from './routes/cards.js';
+import utilsRouter from './routes/utils.js';
 
 // Whitelist specific domains
 // const corsOptions = {
@@ -21,6 +22,7 @@ app.use('/health', healthRouter);
 app.use('/sets', setsRouter);
 app.use('/players', playersRouter);
 app.use('/cards', cardsRouter);
+app.use('/utils', utilsRouter);
 
 // Error-handling middleware must be at the end
 app.use(errorHandler);

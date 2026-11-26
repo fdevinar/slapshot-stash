@@ -71,3 +71,11 @@ export async function addCardToTable(player: Player, setId: string) {
         throw new ApiError(data.error, response.status);
     }                        
 }
+
+export async function deleteAllData() {
+    const requestOptions = {
+        method: 'DELETE',
+    };
+    const response = await fetchHelper('http://localhost:3000/utils',requestOptions);
+    console.log(response);
+}

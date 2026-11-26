@@ -4,7 +4,7 @@ import './App.css'
 import CardsTable from './components/CardsTable'
 import PlayerSearch from './components/PlayerSearch';
 import type { CardDetails, CardSet } from './api/types';
-import { fetchCards, fetchSets } from './api/fetchData';
+import { fetchCards, fetchSets, deleteAllData } from './api/fetchData';
 import toast, { Toaster } from 'react-hot-toast';
 
 function App() {
@@ -38,9 +38,17 @@ function App() {
     loadSets();    
   }, []);
 
-  function deleteAllCards() {
+  async function deleteAllCards() {
     if (confirm('Are you sure you want to delete all cards?')) {      
       // call backend here
+      try {      
+      const data = await deleteAllData();
+      console.log(data);
+      toast.success('Data deleted!');
+    } catch (error) {
+      console.error('Failed to delete data:', error);
+    }    
+      
     }
     
   }
